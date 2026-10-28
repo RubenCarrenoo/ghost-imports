@@ -56,78 +56,91 @@
       <div class="cat-top">
         <!-- BARRA LATERAL DE FILTROS -->
         <form class="filters" id="catalogFilterForm" role="search" onsubmit="event.preventDefault()">
-          <label for="filterQuery">Buscar</label>
-          <input type="search" id="filterQuery" placeholder="Nombre, marca o tipo...">
+          <div class="f-item f-full">
+            <label for="filterQuery">Buscar</label>
+            <input type="search" id="filterQuery" placeholder="Nombre, marca o tipo...">
+          </div>
 
-          <label for="filterBrand">Marca</label>
-          <select id="filterBrand">
-            <option value="">Todas las marcas</option>
-            <option value="Nike">Nike</option>
-            <option value="Supreme">Supreme</option>
-            <option value="Undergold">Undergold</option>
-            <option value="Jordan">Jordan</option>
-            <option value="Sprayground">Sprayground</option>
-            <option value="New Era">New Era</option>
-          </select>
+          <div class="f-item">
+            <label for="filterBrand">Marca</label>
+            <select id="filterBrand">
+              <option value="">Todas las marcas</option>
+              <option value="Nike">Nike</option>
+              <option value="Supreme">Supreme</option>
+              <option value="Undergold">Undergold</option>
+              <option value="Jordan">Jordan</option>
+              <option value="Sprayground">Sprayground</option>
+              <option value="New Era">New Era</option>
+            </select>
+          </div>
 
-          <label for="filterCat">Categoría</label>
-          <select id="filterCat">
-            <option value="">Todas las categorías</option>
-            <option value="hoodies">Hoodies & Buzos</option>
-            <option value="sneakers">Sneakers Jordan</option>
-            <option value="bolsos">Morrales Sprayground</option>
-            <option value="pantalonetas">Pantalonetas Urbanas</option>
-            <option value="gorras">Gorras New Era cerradas</option>
-          </select>
+          <div class="f-item">
+            <label for="filterCat">Categoría</label>
+            <select id="filterCat">
+              <option value="">Todas las categorías</option>
+              <option value="hoodies">Hoodies & Buzos</option>
+              <option value="sneakers">Sneakers Jordan</option>
+              <option value="bolsos">Morrales Sprayground</option>
+              <option value="pantalonetas">Pantalonetas Urbanas</option>
+              <option value="gorras">Gorras New Era cerradas</option>
+            </select>
+          </div>
 
-          <label for="filterSize">Talla</label>
-          <select id="filterSize">
-            <option value="">Todas las tallas</option>
-            <!-- Tallas de ropa -->
-            <optgroup label="Ropa">
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-            </optgroup>
-            <!-- Calzado -->
-            <optgroup label="Sneakers (Calzado)">
-              <option value="38">38</option>
-              <option value="39">39</option>
-              <option value="40">40</option>
-              <option value="41">41</option>
-              <option value="42">42</option>
-              <option value="43">43</option>
-              <option value="44">44</option>
-            </optgroup>
-            <!-- Gorras y Bolsos -->
-            <optgroup label="Accesorios">
-              <option value="7 1/4">7 1/4 (Gorra)</option>
-              <option value="7 3/8">7 3/8 (Gorra)</option>
-              <option value="7 1/2">7 1/2 (Gorra)</option>
-              <option value="Única">Única (Bolsos)</option>
-            </optgroup>
-          </select>
+          <div class="f-item">
+            <label for="filterSize">Talla</label>
+            <select id="filterSize">
+              <option value="">Todas las tallas</option>
+              <!-- Tallas de ropa -->
+              <optgroup label="Ropa">
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </optgroup>
+              <!-- Calzado -->
+              <optgroup label="Sneakers (Calzado)">
+                <option value="38">38</option>
+                <option value="39">39</option>
+                <option value="40">40</option>
+                <option value="41">41</option>
+                <option value="42">42</option>
+                <option value="43">43</option>
+                <option value="44">44</option>
+              </optgroup>
+              <!-- Gorras y Bolsos -->
+              <optgroup label="Accesorios">
+                <option value="7 1/4">7 1/4 (Gorra)</option>
+                <option value="7 3/8">7 3/8 (Gorra)</option>
+                <option value="7 1/2">7 1/2 (Gorra)</option>
+                <option value="Única">Única (Bolsos)</option>
+              </optgroup>
+            </select>
+          </div>
 
-          <label for="filterMax">Precio máximo (COP)</label>
-          <input type="number" id="filterMax" min="0" step="20000" placeholder="Ej: 300000">
+          <div class="f-item">
+            <label for="filterMax">Precio máximo (COP)</label>
+            <input type="number" id="filterMax" min="0" step="20000" placeholder="Ej: 300000">
+          </div>
 
-          <label class="chk">
-            <input type="checkbox" id="filterAvail">
-            Solo disponibles en stock
-          </label>
+          <div class="f-item">
+            <label for="filterSort">Ordenar por</label>
+            <select id="filterSort">
+              <option value="rel">Relevancia</option>
+              <option value="new">Novedades (New Drops)</option>
+              <option value="lo">Precio: menor a mayor</option>
+              <option value="hi">Precio: mayor a menor</option>
+            </select>
+          </div>
 
-          <label for="filterSort">Ordenar por</label>
-          <select id="filterSort">
-            <option value="rel">Relevancia</option>
-            <option value="new">Novedades (New Drops)</option>
-            <option value="lo">Precio: menor a mayor</option>
-            <option value="hi">Precio: mayor a menor</option>
-          </select>
-
-          <button type="button" class="btn g" id="btnResetFilters" style="width:100%;margin-top:16px;padding:8px">
-            LIMPIAR FILTROS
-          </button>
+          <div class="f-item f-actions">
+            <label class="chk" style="margin-top:6px">
+              <input type="checkbox" id="filterAvail">
+              Solo disponibles en stock
+            </label>
+            <button type="button" class="btn g" id="btnResetFilters" style="width:100%;margin-top:10px;padding:8px;font-size:12px">
+              LIMPIAR FILTROS
+            </button>
+          </div>
         </form>
 
         <!-- RESULTADOS DE PRODUCTOS -->

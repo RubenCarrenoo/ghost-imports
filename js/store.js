@@ -223,8 +223,29 @@ document.addEventListener("click", async (e) => {
     if (nav) {
       const isOpen = nav.classList.toggle("open");
       target.setAttribute("aria-expanded", isOpen);
+      target.innerHTML = isOpen ? "✕" : "☰";
     }
     return;
+  }
+
+  // Cerrar menú móvil al hacer clic en enlaces o fuera
+  const openNav = document.getElementById("nav");
+  if (openNav && openNav.classList.contains("open")) {
+    if (target.tagName === "A" && openNav.contains(target)) {
+      openNav.classList.remove("open");
+      const burger = document.getElementById("burger");
+      if (burger) {
+        burger.setAttribute("aria-expanded", "false");
+        burger.innerHTML = "☰";
+      }
+    } else if (!openNav.contains(target) && target.id !== "burger") {
+      openNav.classList.remove("open");
+      const burger = document.getElementById("burger");
+      if (burger) {
+        burger.setAttribute("aria-expanded", "false");
+        burger.innerHTML = "☰";
+      }
+    }
   }
 
   // Acción rápida de agregar
@@ -321,5 +342,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Cerrar con Escape
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") window.toggleCart(false);
+  if (e.key === "Escape") {
+    window.toggleCart(false);
+    const nav = document.getElementById("nav");
+    if (nav && nav.classList.contains("open")) {
+      nav.classList.remove("open");
+      const burger = document.getElementById("burger");
+      if (burger) {
+        burger.setAttribute("aria-expanded", "false");
+        burger.innerHTML = "☰";
+      }
+    }
+  }
 });
