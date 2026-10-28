@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Catálogo | Ghost Imports</title>
+  <meta name="description" content="Explora el catálogo completo de Ghost Imports: Hoodies, Sneakers, Bolsos, Pantalonetas y Gorras.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700&display=swap">
+  
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Barra Superior -->
+  <div class="top">Envíos nacionales a toda Colombia · Pagos con Nequi y Bancolombia</div>
+
+  <!-- Cabecera -->
+  <header>
+    <div class="wrap bar">
+      <button class="ib" id="burger" aria-label="Abrir menú" aria-expanded="false">☰</button>
+      
+      <a href="index.html" aria-label="Ghost Imports, inicio">
+        <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
+      </a>
+
+      <nav id="nav" aria-label="Principal">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html" class="on" id="navAll">Catálogo</a>
+        <a href="catalogo.html?cat=hoodies" id="navHoodies">Hoodies</a>
+        <a href="catalogo.html?cat=sneakers" id="navSneakers">Sneakers</a>
+        <a href="catalogo.html?cat=bolsos" id="navBolsos">Bolsos</a>
+        <a href="catalogo.html?cat=pantalonetas" id="navPantalonetas">Pantalonetas</a>
+        <a href="catalogo.html?cat=gorras" id="navGorras">Gorras</a>
+        <a href="catalogo.html?cat=novedades" id="navNovedades">Novedades</a>
+        <a href="cuenta.html">Mi Cuenta</a>
+      </nav>
+
+      <div class="sp"></div>
+
+      <a class="ib" href="catalogo.html" title="Buscar en catálogo" aria-label="Buscar">⌕</a>
+      <a class="ib" href="cuenta.html" id="userBtn" title="Mi Cuenta" aria-label="Mi Cuenta">👤</a>
+      <button type="button" class="ib" id="cbtn" aria-label="Abrir carrito">
+        🛒<span class="cnt" id="cnt">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Catálogo Principal -->
+  <main>
+    <div class="wrap" style="padding-top:36px;padding-bottom:64px">
+      <h2 id="catalogTitle">Catálogo Completo</h2>
+
+      <div class="cat-top">
+        <!-- BARRA LATERAL DE FILTROS -->
+        <form class="filters" id="catalogFilterForm" role="search" onsubmit="event.preventDefault()">
+          <label for="filterQuery">Buscar</label>
+          <input type="search" id="filterQuery" placeholder="Nombre, marca o tipo...">
+
+          <label for="filterBrand">Marca</label>
+          <select id="filterBrand">
+            <option value="">Todas las marcas</option>
+            <option value="Nike">Nike</option>
+            <option value="Supreme">Supreme</option>
+            <option value="Undergold">Undergold</option>
+            <option value="Jordan">Jordan</option>
+            <option value="Sprayground">Sprayground</option>
+            <option value="New Era">New Era</option>
+          </select>
+
+          <label for="filterCat">Categoría</label>
+          <select id="filterCat">
+            <option value="">Todas las categorías</option>
+            <option value="hoodies">Hoodies & Buzos</option>
+            <option value="sneakers">Sneakers Jordan</option>
+            <option value="bolsos">Morrales Sprayground</option>
+            <option value="pantalonetas">Pantalonetas Urbanas</option>
+            <option value="gorras">Gorras New Era cerradas</option>
+          </select>
+
+          <label for="filterSize">Talla</label>
+          <select id="filterSize">
+            <option value="">Todas las tallas</option>
+            <!-- Tallas de ropa -->
+            <optgroup label="Ropa">
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+            </optgroup>
+            <!-- Calzado -->
+            <optgroup label="Sneakers (Calzado)">
+              <option value="38">38</option>
+              <option value="39">39</option>
+              <option value="40">40</option>
+              <option value="41">41</option>
+              <option value="42">42</option>
+              <option value="43">43</option>
+              <option value="44">44</option>
+            </optgroup>
+            <!-- Gorras y Bolsos -->
+            <optgroup label="Accesorios">
+              <option value="7 1/4">7 1/4 (Gorra)</option>
+              <option value="7 3/8">7 3/8 (Gorra)</option>
+              <option value="7 1/2">7 1/2 (Gorra)</option>
+              <option value="Única">Única (Bolsos)</option>
+            </optgroup>
+          </select>
+
+          <label for="filterMax">Precio máximo (COP)</label>
+          <input type="number" id="filterMax" min="0" step="20000" placeholder="Ej: 300000">
+
+          <label class="chk">
+            <input type="checkbox" id="filterAvail">
+            Solo disponibles en stock
+          </label>
+
+          <label for="filterSort">Ordenar por</label>
+          <select id="filterSort">
+            <option value="rel">Relevancia</option>
+            <option value="new">Novedades (New Drops)</option>
+            <option value="lo">Precio: menor a mayor</option>
+            <option value="hi">Precio: mayor a menor</option>
+          </select>
+
+          <button type="button" class="btn g" id="btnResetFilters" style="width:100%;margin-top:16px;padding:8px">
+            LIMPIAR FILTROS
+          </button>
+        </form>
+
+        <!-- RESULTADOS DE PRODUCTOS -->
+        <div class="res">
+          <div class="grid" id="catalogGrid">
+            <!-- Cargado dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Pie de Página -->
+  <footer>
+    <div class="wrap fg">
+      <div>
+        <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
+        <p>Moda urbana seleccionada. © <span id="yr"></span> Ghost Imports.</p>
+      </div>
+      <div>
+        <b>Tienda</b>
+        <a href="catalogo.html">Catálogo Completo</a>
+        <a href="catalogo.html?cat=novedades">Novedades (New Drops)</a>
+        <a href="cuenta.html">Mi Cuenta y Pedidos</a>
+        <a href="index.html#servicio">Envíos y Cambios</a>
+      </div>
+      <div>
+        <b>Contacto & Pagos</b>
+        <span class="pend">Transferencias: Nequi y Bancolombia</span>
+        <span class="pend" style="display:block">Atención WhatsApp: disponible al pagar</span>
+        <a href="cuenta.html" style="margin-top:6px;color:var(--sil)">
+          Gestión de Pedidos & Perfil
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sombra de fondo para el Drawer -->
+  <div class="shade" id="shade"></div>
+
+  <!-- Drawer Lateral del Carrito -->
+  <aside class="drawer" id="drawer" aria-label="Carrito de compras" aria-hidden="true">
+    <div class="dh">
+      <h3>Carrito</h3>
+      <button type="button" class="ib" id="cx" aria-label="Cerrar carrito">✕</button>
+    </div>
+    <div class="db" id="cl"></div>
+    <div class="df">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span>Total</span>
+        <b id="tot" style="font-size:18px">$0 COP</b>
+      </div>
+      <button type="button" class="btn" id="go">IR A PAGAR</button>
+    </div>
+  </aside>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status"></div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/store.js"></script>
+  <script>
+    let allProducts = [];
+
+    async function applyCatalogFilters() {
+      const q = document.getElementById("filterQuery").value.trim().toLowerCase();
+      const brand = document.getElementById("filterBrand").value;
+      const cat = document.getElementById("filterCat").value;
+      const size = document.getElementById("filterSize").value;
+      const max = document.getElementById("filterMax").value;
+      const avail = document.getElementById("filterAvail").checked;
+      const sort = document.getElementById("filterSort").value;
+
+      // Obtener parámetro 'cat' de URL si es novedades
+      const params = new URLSearchParams(window.location.search);
+      const isNovelties = params.get("cat") === "novedades";
+
+      let filtered = allProducts.filter(p => {
+        if (isNovelties && !p.new) return false;
+        if (cat && p.cat !== cat) return false;
+        if (brand && p.brand !== brand) return false;
+        if (size && (!p.stock || !p.stock[size] || p.stock[size] <= 0)) return false;
+        if (max && p.price > Number(max)) return false;
+        if (avail && window.calcTotalStock(p) <= 0) return false;
+        if (q) {
+          const catInfo = window.INITIAL_CATEGORIES[p.cat] ? window.INITIAL_CATEGORIES[p.cat].name : "";
+          const str = (p.name + " " + p.brand + " " + catInfo).toLowerCase();
+          if (!str.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (sort === "lo") filtered.sort((a, b) => a.price - b.price);
+      if (sort === "hi") filtered.sort((a, b) => b.price - a.price);
+      if (sort === "new") filtered.sort((a, b) => Number(b.new) - Number(a.new));
+
+      const grid = document.getElementById("catalogGrid");
+      if (grid) {
+        if (filtered.length > 0) {
+          grid.innerHTML = filtered.map(window.renderProductCardHTML).join("");
+        } else {
+          grid.innerHTML = `
+            <div class="empty" style="grid-column:1/-1">
+              No se encontraron prendas con los filtros seleccionados.<br>
+              <button type="button" class="btn g" onclick="document.getElementById('btnResetFilters').click()" style="margin-top:14px">
+                Ver todo el catálogo
+              </button>
+            </div>
+          `;
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      allProducts = await window.GhostDB.getProducts();
+
+      // Leer parámetros URL
+      const params = new URLSearchParams(window.location.search);
+      const urlCat = params.get("cat");
+      const urlQ = params.get("q");
+
+      if (urlCat) {
+        if (urlCat === "novedades") {
+          document.getElementById("catalogTitle").textContent = "Novedades (New Drops)";
+          document.getElementById("filterSort").value = "new";
+          const navN = document.getElementById("navNovedades");
+          if (navN) navN.classList.add("on");
+        } else if (window.INITIAL_CATEGORIES[urlCat]) {
+          document.getElementById("catalogTitle").textContent = window.INITIAL_CATEGORIES[urlCat].name;
+          document.getElementById("filterCat").value = urlCat;
+          const navItem = document.getElementById("nav" + urlCat.charAt(0).toUpperCase() + urlCat.slice(1));
+          if (navItem) navItem.classList.add("on");
+        }
+      }
+
+      if (urlQ) {
+        document.getElementById("filterQuery").value = urlQ;
+      }
+
+      // Eventos de filtros
+      const form = document.getElementById("catalogFilterForm");
+      if (form) {
+        form.addEventListener("input", applyCatalogFilters);
+        form.addEventListener("change", applyCatalogFilters);
+      }
+
+      // Limpiar filtros
+      document.getElementById("btnResetFilters").addEventListener("click", () => {
+        document.getElementById("filterQuery").value = "";
+        document.getElementById("filterBrand").value = "";
+        document.getElementById("filterCat").value = "";
+        document.getElementById("filterSize").value = "";
+        document.getElementById("filterMax").value = "";
+        document.getElementById("filterAvail").checked = false;
+        document.getElementById("filterSort").value = "rel";
+        document.getElementById("catalogTitle").textContent = "Catálogo Completo";
+        history.replaceState(null, "", "catalogo.html");
+        applyCatalogFilters();
+      });
+
+      applyCatalogFilters();
+    });
+  </script>
+</body>
+</html>

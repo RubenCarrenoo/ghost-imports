@@ -1,0 +1,56 @@
+=======================================================
+GHOST IMPORTS - SISTEMA COMPLETO CON SESIONES Y MYSQL WORKBENCH
+=======================================================
+
+1. CÓMO VER TU BASE DE DATOS EN MYSQL WORKBENCH:
+-------------------------------------------------------
+Tu base de datos "ghost_imports" ya está creada y conectada en tu MySQL local.
+Para verla en MySQL Workbench:
+1. Abre MySQL Workbench.
+2. Haz clic en tu conexión "Local instance MySQL80".
+3. En la barra izquierda (sección "SCHEMAS"), haz clic derecho y selecciona "Refresh All" (o pulsa el botón de actualizar 🔄).
+4. Verás la base de datos "ghost_imports" con:
+   - Tabla "usuarios": Contiene los clientes registrados y administradores.
+   - Tabla "pedidos": Contiene la información de cada pedido y del cliente que compró.
+   - Tabla "pedido_detalles": Prendas, tallas, cantidades y precios de cada pedido.
+   - Vistas listas para consultar:
+     * vista_usuarios_registrados (SELECT * FROM vista_usuarios_registrados;)
+     * vista_pedidos_clientes (SELECT * FROM vista_pedidos_clientes;)
+     * vista_pedidos_articulos (SELECT * FROM vista_pedidos_articulos;)
+
+-------------------------------------------------------
+2. INICIO DE SESIÓN Y GESTIÓN EN LA TIENDA WEB:
+-------------------------------------------------------
+Ingresa a la página abriendo "index.html" o haciendo clic en el icono 👤 (Mi Cuenta).
+
+A. MODO CLIENTE:
+   - Puedes registrarte con tu nombre, correo, teléfono, ciudad y dirección.
+   - Al iniciar sesión como cliente, puedes:
+     * Ver tus datos personales de entrega.
+     * Ver tu historial de pedidos con sus prendas, tallas, valores y estado actual.
+     * Al comprar en la tienda, tus datos se autocompletan automáticamente.
+   - Credenciales de prueba de cliente:
+     Correo: carlos.mendoza@email.com
+     Contraseña: cliente123
+
+B. MODO ADMINISTRADOR:
+   - Ingresa con las credenciales de administrador:
+     Correo: admin@ghostimports.com
+     Contraseña: admin123
+   - En el panel de administración puedes:
+     * Ver todos los pedidos realizados con nombre del cliente, teléfono, ciudad y prendas.
+     * Cambiar el estado del pedido en tiempo real (Pendiente, En preparación, Enviado, Entregado).
+     * Ver la lista completa de todos los clientes registrados y sus compras.
+     * Ver las estadísticas de ventas y unidades disponibles.
+
+-------------------------------------------------------
+3. ARCHIVOS DEL PROYECTO:
+-------------------------------------------------------
+- index.html        -> Página de inicio y bienvenida.
+- catalogo.html     -> Catálogo con fotos reales y filtros.
+- producto.html     -> Detalle de prenda y selección de talla.
+- pagar.html        -> Finalizar compra con autocompletado de datos del cliente.
+- cuenta.html       -> Login, registro y panel de control (clientes y administrador).
+- database/ghost_imports.sql -> Script de la base de datos MySQL Workbench.
+- js/config.js      -> Configuración de tu número de WhatsApp y datos de Nequi/Bancolombia.
+=======================================================

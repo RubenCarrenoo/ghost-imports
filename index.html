@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ghost Imports | Streetwear en Colombia</title>
+  <meta name="description" content="Ghost Imports: hoodies Nike, Supreme, Undergold, sneakers Jordan, bolsos Sprayground, pantalonetas y gorras New Era cerradas. Envíos en Colombia.">
+  
+  <!-- Tipografía Oficial Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700&display=swap">
+  
+  <!-- Estilos CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Barra de Notificación Superior -->
+  <div class="top">Envíos nacionales a toda Colombia · Pagos con Nequi y Bancolombia</div>
+
+  <!-- Cabecera de Navegación -->
+  <header>
+    <div class="wrap bar">
+      <button class="ib" id="burger" aria-label="Abrir menú" aria-expanded="false">☰</button>
+      
+      <a href="index.html" aria-label="Ghost Imports, inicio">
+        <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
+      </a>
+
+      <nav id="nav" aria-label="Principal">
+        <a href="index.html" class="on">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="catalogo.html?cat=hoodies">Hoodies</a>
+        <a href="catalogo.html?cat=sneakers">Sneakers</a>
+        <a href="catalogo.html?cat=bolsos">Bolsos</a>
+        <a href="catalogo.html?cat=pantalonetas">Pantalonetas</a>
+        <a href="catalogo.html?cat=gorras">Gorras</a>
+        <a href="catalogo.html?cat=novedades">Novedades</a>
+        <a href="cuenta.html">Mi Cuenta</a>
+      </nav>
+
+      <div class="sp"></div>
+
+      <!-- Acciones de Cabecera -->
+      <a class="ib" href="catalogo.html" title="Buscar en catálogo" aria-label="Buscar">⌕</a>
+      <a class="ib" href="cuenta.html" id="userBtn" title="Mi Cuenta" aria-label="Mi Cuenta">👤</a>
+      <button type="button" class="ib" id="cbtn" aria-label="Abrir carrito">
+        🛒<span class="cnt" id="cnt">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main>
+    <!-- HERO SECTION -->
+    <div class="wrap hero">
+      <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
+      <h1>Lo que no se ve, se nota.</h1>
+      <p>Hoodies, sneakers, bolsos y gorras seleccionados para quien viste con criterio propio.</p>
+      <div class="row">
+        <a class="btn" href="catalogo.html">EXPLORAR COLECCIÓN</a>
+        <a class="btn g" href="catalogo.html?cat=novedades">VER NOVEDADES</a>
+      </div>
+    </div>
+
+    <!-- COLECCIONES CON IMÁGENES REALES -->
+    <section>
+      <div class="wrap">
+        <h2>Colecciones</h2>
+        <div class="cats">
+          <a class="cat" href="catalogo.html?cat=hoodies">
+            <img src="img/hoddie nike.png" alt="Hoodies" class="cat-bg-img">
+            <span class="ph">Colección</span>
+            <h3>Hoodies & Buzos</h3>
+            <small>Nike, Supreme, Undergold →</small>
+          </a>
+          <a class="cat" href="catalogo.html?cat=sneakers">
+            <img src="img/jordan 4 oreo.png" alt="Sneakers" class="cat-bg-img">
+            <span class="ph">Colección</span>
+            <h3>Sneakers Jordan</h3>
+            <small>Air Jordan 3 & 4 Retro →</small>
+          </a>
+          <a class="cat" href="catalogo.html?cat=bolsos">
+            <img src="img/sprawground.png" alt="Bolsos" class="cat-bg-img">
+            <span class="ph">Colección</span>
+            <h3>Morrales Sprayground</h3>
+            <small>Edición Shark impermeable →</small>
+          </a>
+          <a class="cat" href="catalogo.html?cat=pantalonetas">
+            <img src="img/pantaloneta jordan roja.png" alt="Pantalonetas" class="cat-bg-img">
+            <span class="ph">Colección</span>
+            <h3>Pantalonetas Urbanas</h3>
+            <small>Jordan Diamond & Jumpman →</small>
+          </a>
+          <a class="cat" href="catalogo.html?cat=gorras">
+            <img src="img/new era LA negra.png" alt="Gorras" class="cat-bg-img">
+            <span class="ph">Colección</span>
+            <h3>Gorras New Era cerradas</h3>
+            <small>59FIFTY Dodgers & Yankees →</small>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAVORITOS -->
+    <section>
+      <div class="wrap">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px">
+          <h2 style="margin-bottom:0">Favoritos de la Calle</h2>
+          <a href="catalogo.html" class="btn g" style="font-size:12px;padding:8px 16px">VER TODOS</a>
+        </div>
+        <div class="grid" id="homeFavoritesGrid">
+          <!-- Renderizado dinámico desde DB -->
+        </div>
+      </div>
+    </section>
+
+    <!-- BANNER CENTRAL -->
+    <div class="band">
+      <img class="lg" src="assets/logo.webp" alt="Ghost Imports" style="width:min(420px,70%);margin:0 auto 18px">
+      <p>Estilo personal, sin explicación.</p>
+    </div>
+
+    <!-- NUEVOS LANZAMIENTOS -->
+    <section>
+      <div class="wrap">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px">
+          <h2 style="margin-bottom:0">Nuevos Lanzamientos (New Drops)</h2>
+          <a href="catalogo.html?cat=novedades" class="btn g" style="font-size:12px;padding:8px 16px">VER NOVEDADES</a>
+        </div>
+        <div class="grid" id="homeNewDropsGrid">
+          <!-- Renderizado dinámico desde DB -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBRE GHOST IMPORTS -->
+    <section>
+      <div class="wrap two">
+        <h2>Ghost Imports</h2>
+        <p>
+          Ghost Imports es una tienda de moda urbana en Colombia. Elegimos prendas y accesorios de marcas que marcan la calle, con foco en el estilo de quien los usa. Aquí encuentras hoodies, sneakers, bolsos, pantalonetas y gorras originales en un solo lugar.
+        </p>
+      </div>
+    </section>
+
+    <!-- CONFIANZA Y SERVICIO -->
+    <section id="servicio">
+      <div class="wrap">
+        <h2>Confianza y servicio</h2>
+        <div class="trust">
+          <div class="tr">
+            <h3>Pagos</h3>
+            <p class="pend">Aceptamos transferencias manuales por Nequi y Bancolombia.</p>
+          </div>
+          <div class="tr">
+            <h3>Envíos nacionales</h3>
+            <p class="pend">Cobertura a toda Colombia con seguimiento por guía.</p>
+          </div>
+          <div class="tr">
+            <h3>Cambios y devoluciones</h3>
+            <p class="pend">Garantía por talla y asesoría personalizada directa.</p>
+          </div>
+          <div class="tr">
+            <h3>Autenticidad</h3>
+            <p class="pend">Prendas y accesorios originales cuidadosamente seleccionados.</p>
+          </div>
+          <div class="tr">
+            <h3>Atención al cliente</h3>
+            <p class="pend">Confirmación de pedidos y comprobantes vía WhatsApp.</p>
+          </div>
+          <div class="tr">
+            <h3>Base de Datos Integrada</h3>
+            <p class="pend">Registro seguro de pedidos y control de inventario en tiempo real.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pie de Página -->
+  <footer>
+    <div class="wrap fg">
+      <div>
+        <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
+        <p>Moda urbana seleccionada. © <span id="yr"></span> Ghost Imports.</p>
+      </div>
+      <div>
+        <b>Tienda</b>
+        <a href="catalogo.html">Catálogo Completo</a>
+        <a href="catalogo.html?cat=novedades">Novedades (New Drops)</a>
+        <a href="cuenta.html">Mi Cuenta y Pedidos</a>
+        <a href="index.html#servicio">Envíos y Cambios</a>
+      </div>
+      <div>
+        <b>Contacto & Pagos</b>
+        <span class="pend">Transferencias: Nequi y Bancolombia</span>
+        <span class="pend" style="display:block">Atención WhatsApp: disponible al pagar</span>
+        <a href="cuenta.html" style="margin-top:6px;color:var(--sil)">
+          Gestión de Pedidos & Perfil
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sombra de fondo para el Drawer -->
+  <div class="shade" id="shade"></div>
+
+  <!-- Drawer Lateral del Carrito -->
+  <aside class="drawer" id="drawer" aria-label="Carrito de compras" aria-hidden="true">
+    <div class="dh">
+      <h3>Carrito</h3>
+      <button type="button" class="ib" id="cx" aria-label="Cerrar carrito">✕</button>
+    </div>
+    <div class="db" id="cl"></div>
+    <div class="df">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span>Total</span>
+        <b id="tot" style="font-size:18px">$0 COP</b>
+      </div>
+      <button type="button" class="btn" id="go">IR A PAGAR</button>
+    </div>
+  </aside>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status"></div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/store.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const prods = await window.GhostDB.getProducts();
+      
+      const favGrid = document.getElementById("homeFavoritesGrid");
+      if (favGrid) {
+        favGrid.innerHTML = prods.slice(0, 4).map(window.renderProductCardHTML).join("");
+      }
+
+      const dropsGrid = document.getElementById("homeNewDropsGrid");
+      if (dropsGrid) {
+        const drops = prods.filter(p => p.new);
+        dropsGrid.innerHTML = (drops.length ? drops.slice(0, 6) : prods.slice(4, 10)).map(window.renderProductCardHTML).join("");
+      }
+    });
+  </script>
+</body>
+</html>

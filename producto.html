@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Detalle de Producto | Ghost Imports</title>
+  <meta name="description" content="Detalle de producto, tallas disponibles y compra directa en Ghost Imports.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700&display=swap">
+  
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Barra Superior -->
+  <div class="top">Envíos nacionales a toda Colombia · Pagos con Nequi y Bancolombia</div>
+
+  <!-- Cabecera -->
+  <header>
+    <div class="wrap bar">
+      <button class="ib" id="burger" aria-label="Abrir menú" aria-expanded="false">☰</button>
+      
+      <a href="index.html" aria-label="Ghost Imports, inicio">
+        <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
+      </a>
+
+      <nav id="nav" aria-label="Principal">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="catalogo.html?cat=hoodies">Hoodies</a>
+        <a href="catalogo.html?cat=sneakers">Sneakers</a>
+        <a href="catalogo.html?cat=bolsos">Bolsos</a>
+        <a href="catalogo.html?cat=pantalonetas">Pantalonetas</a>
+        <a href="catalogo.html?cat=gorras">Gorras</a>
+        <a href="catalogo.html?cat=novedades">Novedades</a>
+        <a href="cuenta.html">Mi Cuenta</a>
+      </nav>
+
+      <div class="sp"></div>
+
+      <a class="ib" href="catalogo.html" title="Buscar en catálogo" aria-label="Buscar">⌕</a>
+      <a class="ib" href="cuenta.html" id="userBtn" title="Mi Cuenta" aria-label="Mi Cuenta">👤</a>
+      <button type="button" class="ib" id="cbtn" aria-label="Abrir carrito">
+        🛒<span class="cnt" id="cnt">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Detalle del Producto -->
+  <main>
+    <div class="wrap" style="padding-top:28px;padding-bottom:64px" id="productContainer">
+      <!-- Breadcrumbs -->
+      <div class="crumb" id="breadcrumbs">
+        <a href="index.html">Inicio</a> / <a href="catalogo.html">Catálogo</a> / <span id="crumbCat">Prenda</span>
+      </div>
+
+      <!-- Detalle con Imagen Real -->
+      <div class="pd">
+        <div class="pd-img-box">
+          <img id="productMainPhoto" src="assets/logo.webp" alt="Foto del Producto">
+          <span class="tag" id="productBadge" style="display:none">NEW DROP</span>
+        </div>
+
+        <div>
+          <span class="br" id="productBrand">Marca</span>
+          <h2 style="margin:6px 0 12px" id="productTitle">Cargando producto...</h2>
+          <p class="pr" style="font-size:26px" id="productPrice">$0 COP</p>
+          
+          <p style="color:var(--mut);line-height:1.6;margin:16px 0 24px;font-size:15px" id="productDesc">
+            Descripción del producto...
+          </p>
+
+          <b>Talla</b>
+          <div class="sz" id="sizeList">
+            <!-- Botones de tallas -->
+          </div>
+
+          <p class="av" id="availabilityNotice" aria-live="polite">
+            Elige una talla para continuar
+          </p>
+
+          <div class="row" style="margin-top:24px">
+            <button type="button" class="btn" id="btnAddToCart" disabled>
+              AGREGAR AL CARRITO
+            </button>
+            <button type="button" class="btn g" id="btnBuyNow" disabled>
+              COMPRAR AHORA
+            </button>
+          </div>
+
+          <div class="note" style="margin-top:28px">
+            <b>Información de Compra & Garantía</b><br>
+            • Envíos asegurados con guía a toda Colombia.<br>
+            • Pagos por transferencias <b>Nequi</b> y <b>Bancolombia</b> con comprobante por WhatsApp.<br>
+            • Registro transaccional del pedido en la base de datos de Ghost Imports.
+          </div>
+        </div>
+      </div>
+
+      <!-- Productos Relacionados -->
+      <section style="padding:56px 0 0">
+        <h2>También te puede gustar</h2>
+        <div class="grid" id="relatedProductsGrid">
+          <!-- Cargado dinámicamente -->
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Pie de Página -->
+  <footer>
+    <div class="wrap fg">
+      <div>
+        <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
+        <p>Moda urbana seleccionada. © <span id="yr"></span> Ghost Imports.</p>
+      </div>
+      <div>
+        <b>Tienda</b>
+        <a href="catalogo.html">Catálogo Completo</a>
+        <a href="catalogo.html?cat=novedades">Novedades (New Drops)</a>
+        <a href="cuenta.html">Mi Cuenta y Pedidos</a>
+        <a href="index.html#servicio">Envíos y Cambios</a>
+      </div>
+      <div>
+        <b>Contacto & Pagos</b>
+        <span class="pend">Transferencias: Nequi y Bancolombia</span>
+        <span class="pend" style="display:block">Atención WhatsApp: disponible al pagar</span>
+        <a href="cuenta.html" style="margin-top:6px;color:var(--sil)">
+          Gestión de Pedidos & Perfil
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sombra de fondo para el Drawer -->
+  <div class="shade" id="shade"></div>
+
+  <!-- Drawer Lateral del Carrito -->
+  <aside class="drawer" id="drawer" aria-label="Carrito de compras" aria-hidden="true">
+    <div class="dh">
+      <h3>Carrito</h3>
+      <button type="button" class="ib" id="cx" aria-label="Cerrar carrito">✕</button>
+    </div>
+    <div class="db" id="cl"></div>
+    <div class="df">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span>Total</span>
+        <b id="tot" style="font-size:18px">$0 COP</b>
+      </div>
+      <button type="button" class="btn" id="go">IR A PAGAR</button>
+    </div>
+  </aside>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status"></div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/store.js"></script>
+  <script>
+    let currentProduct = null;
+    let selectedSize = null;
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get("id") || "h1";
+
+      const prods = await window.GhostDB.getProducts();
+      currentProduct = prods.find(p => p.id === productId) || prods[0];
+
+      if (!currentProduct) {
+        document.getElementById("productContainer").innerHTML = `
+          <div class="empty" style="margin:60px 0">
+            Producto no encontrado. <a href="catalogo.html"><u>Volver al catálogo</u></a>
+          </div>
+        `;
+        return;
+      }
+
+      // Actualizar datos del producto
+      document.title = `${currentProduct.name} | Ghost Imports`;
+      document.getElementById("productBrand").textContent = currentProduct.brand;
+      document.getElementById("productTitle").textContent = currentProduct.name;
+      document.getElementById("productPrice").textContent = window.formatCOP(currentProduct.price);
+      document.getElementById("productDesc").textContent = currentProduct.description;
+
+      const catInfo = window.INITIAL_CATEGORIES[currentProduct.cat];
+      const catName = catInfo ? catInfo.name : "Colección";
+
+      document.getElementById("crumbCat").innerHTML = `<a href="catalogo.html?cat=${currentProduct.cat}">${catName}</a> / ${currentProduct.name}`;
+      
+      const photoEl = document.getElementById("productMainPhoto");
+      if (photoEl) {
+        photoEl.src = currentProduct.image || "assets/logo.webp";
+        photoEl.alt = currentProduct.name;
+      }
+
+      if (currentProduct.new) {
+        document.getElementById("productBadge").style.display = "inline-block";
+      }
+
+      // Tallas
+      const sizeContainer = document.getElementById("sizeList");
+      const stockEntries = Object.entries(currentProduct.stock || {});
+      const totalStock = window.calcTotalStock(currentProduct);
+
+      if (stockEntries.length > 0) {
+        sizeContainer.innerHTML = stockEntries.map(([s, qty]) => `
+          <button type="button" data-size="${s}" ${qty > 0 ? "" : "disabled"} aria-label="Talla ${s}">
+            ${s}
+          </button>
+        `).join("");
+
+        // Eventos en botones de talla
+        sizeContainer.querySelectorAll("button:not([disabled])").forEach(btn => {
+          btn.addEventListener("click", () => {
+            sizeContainer.querySelectorAll("button").forEach(b => b.classList.remove("on"));
+            btn.classList.add("on");
+            selectedSize = btn.dataset.size;
+            const units = currentProduct.stock[selectedSize];
+            
+            document.getElementById("availabilityNotice").innerHTML = `
+              <span class="y">${units} ${units === 1 ? 'unidad disponible' : 'unidades disponibles'} en talla ${selectedSize}</span>
+            `;
+            document.getElementById("btnAddToCart").disabled = false;
+            document.getElementById("btnBuyNow").disabled = false;
+          });
+        });
+      }
+
+      if (totalStock <= 0) {
+        document.getElementById("availabilityNotice").innerHTML = `<span class="n">Agotado temporalmente en todas las tallas</span>`;
+      }
+
+      // Botón Agregar al Carrito
+      document.getElementById("btnAddToCart").addEventListener("click", () => {
+        if (!selectedSize) {
+          window.showToast("Por favor selecciona tu talla", true);
+          return;
+        }
+        window.addToGhostCart(currentProduct.id, selectedSize);
+      });
+
+      // Botón Comprar Ahora
+      document.getElementById("btnBuyNow").addEventListener("click", async () => {
+        if (!selectedSize) {
+          window.showToast("Por favor selecciona tu talla", true);
+          return;
+        }
+        const added = await window.addToGhostCart(currentProduct.id, selectedSize);
+        if (added) {
+          window.location.href = "pagar.html";
+        }
+      });
+
+      // Productos Relacionados
+      const related = prods.filter(p => p.cat === currentProduct.cat && p.id !== currentProduct.id);
+      const relGrid = document.getElementById("relatedProductsGrid");
+      if (relGrid) {
+        const toShow = related.length ? related.slice(0, 4) : prods.filter(p => p.id !== currentProduct.id).slice(0, 4);
+        relGrid.innerHTML = toShow.map(window.renderProductCardHTML).join("");
+      }
+    });
+  </script>
+</body>
+</html>

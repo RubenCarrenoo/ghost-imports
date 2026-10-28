@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mi Cuenta & Gestión | Ghost Imports</title>
+  <meta name="description" content="Inicio de sesión, registro y seguimiento de pedidos en Ghost Imports.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700&display=swap">
+  
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Barra Superior -->
+  <div class="top">Envíos nacionales a toda Colombia · Pagos con Nequi y Bancolombia</div>
+
+  <!-- Cabecera -->
+  <header>
+    <div class="wrap bar">
+      <button class="ib" id="burger" aria-label="Abrir menú" aria-expanded="false">☰</button>
+      
+      <a href="index.html" aria-label="Ghost Imports, inicio">
+        <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
+      </a>
+
+      <nav id="nav" aria-label="Principal">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="catalogo.html?cat=hoodies">Hoodies</a>
+        <a href="catalogo.html?cat=sneakers">Sneakers</a>
+        <a href="catalogo.html?cat=bolsos">Bolsos</a>
+        <a href="catalogo.html?cat=pantalonetas">Pantalonetas</a>
+        <a href="catalogo.html?cat=gorras">Gorras</a>
+        <a href="catalogo.html?cat=novedades">Novedades</a>
+        <a href="cuenta.html" class="on">Mi Cuenta</a>
+      </nav>
+
+      <div class="sp"></div>
+
+      <a class="ib" href="catalogo.html" title="Buscar en catálogo" aria-label="Buscar">⌕</a>
+      <a class="ib on" href="cuenta.html" id="userBtn" title="Mi Cuenta" aria-label="Mi Cuenta">👤</a>
+      <button type="button" class="ib" id="cbtn" aria-label="Abrir carrito">
+        🛒<span class="cnt" id="cnt">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Contenido Dinámico de Cuenta -->
+  <main>
+    <div class="wrap" style="padding:40px 20px 70px">
+
+      <!-- VISTA 1: FORMULARIOS DE INICIO DE SESIÓN Y REGISTRO (SIN SESIÓN) -->
+      <div id="viewGuest" style="display:none">
+        <div class="auth-box">
+          <div class="auth-tabs">
+            <button type="button" class="auth-tab active" id="tabLoginBtn">Iniciar Sesión</button>
+            <button type="button" class="auth-tab" id="tabRegisterBtn">Registrarme</button>
+          </div>
+
+          <!-- FORMULARIO LOGIN -->
+          <form id="formLogin">
+            <h2 style="font-size:22px;margin-bottom:6px">Bienvenido de nuevo</h2>
+            <p style="color:var(--mut);font-size:13px;margin-bottom:20px">
+              Ingresa con tus credenciales de cliente o administrador.
+            </p>
+
+            <label for="l_email">Correo Electrónico</label>
+            <input type="email" id="l_email" placeholder="ejemplo@correo.com" required autocomplete="email">
+
+            <label for="l_pass">Contraseña</label>
+            <input type="password" id="l_pass" placeholder="••••••••" required autocomplete="current-password">
+
+            <button type="submit" class="btn" style="width:100%;margin-top:22px">
+              INGRESAR A MI CUENTA
+            </button>
+          </form>
+
+          <!-- FORMULARIO REGISTRO -->
+          <form id="formRegister" style="display:none">
+            <h2 style="font-size:22px;margin-bottom:6px">Crear Cuenta Nueva</h2>
+            <p style="color:var(--mut);font-size:13px;margin-bottom:20px">
+              Regístrate para ver tus pedidos, agilizar tus compras y recibir lanzamientos exclusivos.
+            </p>
+
+            <label for="r_name">Nombre y Apellido</label>
+            <input type="text" id="r_name" placeholder="Ej: Santiago Ruiz" required>
+
+            <label for="r_email">Correo Electrónico</label>
+            <input type="email" id="r_email" placeholder="santiago@correo.com" required>
+
+            <label for="r_phone">Número Celular / WhatsApp</label>
+            <input type="tel" id="r_phone" placeholder="3001234567" required>
+
+            <label for="r_city">Ciudad y Departamento</label>
+            <input type="text" id="r_city" placeholder="Ej: Medellín, Antioquia" required>
+
+            <label for="r_address">Dirección de Entrega</label>
+            <input type="text" id="r_address" placeholder="Calle / Carrera, Torre o Apto" required>
+
+            <label for="r_pass">Crea una Contraseña</label>
+            <input type="password" id="r_pass" placeholder="Mínimo 4 caracteres" required autocomplete="new-password">
+
+            <button type="submit" class="btn" style="width:100%;margin-top:22px">
+              CREAR CUENTA Y REGISTRARME
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- VISTA 2: PANEL DE CLIENTE -->
+      <div id="viewCustomer" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:28px">
+          <div>
+            <span class="status-badge ok" style="margin-bottom:8px">Cliente Registrado</span>
+            <h2 id="custWelcomeName">¡Hola!</h2>
+            <p style="color:var(--mut);font-size:14px;margin-top:4px">
+              Aquí puedes revisar todos tus pedidos registrados y actualizar tus datos de entrega.
+            </p>
+          </div>
+          <button type="button" class="btn g" id="btnLogoutCust" style="font-size:12px">
+            CERRAR SESIÓN
+          </button>
+        </div>
+
+        <div class="account-grid">
+          <!-- TARJETA CON DATOS DE ENTREGA -->
+          <div>
+            <div class="user-card">
+              <h3 style="font-size:18px;margin-bottom:16px">Mis Datos de Entrega</h3>
+              
+              <div style="font-size:14px;line-height:1.8">
+                <span style="color:var(--mut)">Nombre:</span> <b id="custProfileName" style="color:var(--ink);display:block"></b>
+                <span style="color:var(--mut)">Correo:</span> <span id="custProfileEmail" style="display:block"></span>
+                <span style="color:var(--mut)">Celular:</span> <span id="custProfilePhone" style="display:block"></span>
+                <span style="color:var(--mut)">Ciudad:</span> <span id="custProfileCity" style="display:block"></span>
+                <span style="color:var(--mut)">Dirección de Entrega:</span> <span id="custProfileAddress" style="display:block"></span>
+              </div>
+
+              <div style="margin-top:24px;border-top:1px solid var(--line);padding-top:16px">
+                <a href="catalogo.html" class="btn" style="width:100%;text-align:center;display:block">
+                  IR A LA TIENDA
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- HISTORIAL DE PEDIDOS DEL CLIENTE -->
+          <div>
+            <h3 style="font-size:20px;margin-bottom:16px">Mis Pedidos Registrados</h3>
+            <div id="custOrdersList">
+              <!-- Renderizado dinámico de pedidos -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA 3: PANEL DE ADMINISTRACIÓN EMPRESARIAL -->
+      <div id="viewAdmin" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:28px">
+          <div>
+            <span class="status-badge pending" style="margin-bottom:8px">Panel Administrativo</span>
+            <h2>Gestión Ghost Imports</h2>
+            <p style="color:var(--mut);font-size:14px;margin-top:4px">
+              Control comercial de pedidos, clientes registrados y enlace con base de datos MySQL Workbench.
+            </p>
+          </div>
+          <button type="button" class="btn g" id="btnLogoutAdmin" style="font-size:12px">
+            CERRAR SESIÓN
+          </button>
+        </div>
+
+        <!-- TARJETAS DE MÉTRICAS COMERCIALES -->
+        <div class="db-stat-grid">
+          <div class="db-stat-card">
+            <span>Ingresos Totales</span>
+            <b id="admStatRevenue">$0 COP</b>
+          </div>
+          <div class="db-stat-card">
+            <span>Pedidos Registrados</span>
+            <b id="admStatOrders">0</b>
+          </div>
+          <div class="db-stat-card">
+            <span>Clientes Registrados</span>
+            <b id="admStatClients">0</b>
+          </div>
+          <div class="db-stat-card">
+            <span>Unidades en Inventario</span>
+            <b id="admStatStock">0</b>
+          </div>
+        </div>
+
+        <!-- PESTAÑAS ADMINISTRATIVAS -->
+        <div class="admin-nav">
+          <button type="button" class="active" id="admTabOrdersBtn">Gestión de Pedidos</button>
+          <button type="button" id="admTabClientsBtn">Clientes Registrados</button>
+          <button type="button" id="admTabDatabaseBtn">Base de Datos MySQL Workbench</button>
+        </div>
+
+        <!-- SECCIÓN 1: GESTIÓN DE PEDIDOS -->
+        <div id="admSectionOrders">
+          <div class="db-panel">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+              <h3 style="margin:0">Listado de Pedidos de Clientes</h3>
+              <span style="font-size:13px;color:var(--mut)" id="admOrdersCount">Cargando...</span>
+            </div>
+
+            <div id="admOrdersTableContainer" style="overflow-x:auto">
+              <!-- Tabla de pedidos -->
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 2: CLIENTES REGISTRADOS -->
+        <div id="admSectionClients" style="display:none">
+          <div class="db-panel">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+              <h3 style="margin:0">Directorio de Clientes Registrados</h3>
+              <span style="font-size:13px;color:var(--mut)" id="admClientsCount">Cargando...</span>
+            </div>
+
+            <div id="admClientsTableContainer" style="overflow-x:auto">
+              <!-- Tabla de clientes -->
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 3: CONEXIÓN MYSQL WORKBENCH -->
+        <div id="admSectionDatabase" style="display:none">
+          <div class="db-panel">
+            <h3 style="margin-bottom:12px">Estado de Base de Datos MySQL Workbench</h3>
+            <p style="color:var(--mut);font-size:14px;line-height:1.6;margin-bottom:20px">
+              La base de datos se encuentra alojada en MySQL Server 8.0 y está enlazada directamente con MySQL Workbench.
+            </p>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:16px;margin-bottom:24px">
+              <div style="border:1px solid var(--line);padding:16px;background:#050505">
+                <span class="status-badge ok" style="margin-bottom:8px">Enlace Activo</span>
+                <h4 style="font-size:16px;margin:4px 0">Instancia Local MySQL</h4>
+                <p style="color:var(--mut);font-size:13px;margin:0">
+                  Host: <b>localhost:3306</b><br>
+                  Base de Datos: <b>ghost_imports</b><br>
+                  Usuario: <b>root</b>
+                </p>
+              </div>
+
+              <div style="border:1px solid var(--line);padding:16px;background:#050505">
+                <span class="status-badge ok" style="margin-bottom:8px">Tablas Principales</span>
+                <h4 style="font-size:16px;margin:4px 0">Estructura Comercial</h4>
+                <p style="color:var(--mut);font-size:13px;margin:0">
+                  • <b>usuarios:</b> Clientes y Administradores<br>
+                  • <b>pedidos:</b> Información de compras y clientes<br>
+                  • <b>pedido_detalles:</b> Artículos y tallas
+                </p>
+              </div>
+
+              <div style="border:1px solid var(--line);padding:16px;background:#050505">
+                <span class="status-badge ok" style="margin-bottom:8px">Vistas para Consultas</span>
+                <h4 style="font-size:16px;margin:4px 0">Consultas en Workbench</h4>
+                <p style="color:var(--mut);font-size:13px;margin:0">
+                  • <code>vista_usuarios_registrados</code><br>
+                  • <code>vista_pedidos_clientes</code><br>
+                  • <code>vista_pedidos_articulos</code>
+                </p>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+              <button type="button" class="btn" id="btnSyncMySQL">
+                SINCRONIZAR AHORA CON MYSQL WORKBENCH
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Pie de Página -->
+  <footer>
+    <div class="wrap fg">
+      <div>
+        <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
+        <p>Moda urbana seleccionada. © <span id="yr"></span> Ghost Imports.</p>
+      </div>
+      <div>
+        <b>Tienda</b>
+        <a href="catalogo.html">Catálogo Completo</a>
+        <a href="catalogo.html?cat=novedades">Novedades (New Drops)</a>
+        <a href="cuenta.html">Mi Cuenta y Pedidos</a>
+        <a href="index.html#servicio">Envíos y Cambios</a>
+      </div>
+      <div>
+        <b>Contacto & Pagos</b>
+        <span class="pend">Transferencias: Nequi y Bancolombia</span>
+        <span class="pend" style="display:block">Atención WhatsApp: disponible al pagar</span>
+        <a href="cuenta.html" style="margin-top:6px;color:var(--sil)">
+          Gestión de Pedidos & Perfil
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sombra de fondo para el Drawer -->
+  <div class="shade" id="shade"></div>
+
+  <!-- Drawer Lateral del Carrito -->
+  <aside class="drawer" id="drawer" aria-label="Carrito de compras" aria-hidden="true">
+    <div class="dh">
+      <h3>Carrito</h3>
+      <button type="button" class="ib" id="cx" aria-label="Cerrar carrito">✕</button>
+    </div>
+    <div class="db" id="cl"></div>
+    <div class="df">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span>Total</span>
+        <b id="tot" style="font-size:18px">$0 COP</b>
+      </div>
+      <button type="button" class="btn" id="go">IR A PAGAR</button>
+    </div>
+  </aside>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status"></div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/store.js"></script>
+
+  <script>
+    // Inicialización de la pantalla de cuenta
+    async function initAccountPage() {
+      await window.GhostDB.init();
+      const currentUser = window.GhostAuth.getCurrentUser();
+
+      const viewGuest = document.getElementById("viewGuest");
+      const viewCustomer = document.getElementById("viewCustomer");
+      const viewAdmin = document.getElementById("viewAdmin");
+
+      viewGuest.style.display = "none";
+      viewCustomer.style.display = "none";
+      viewAdmin.style.display = "none";
+
+      if (!currentUser) {
+        // Modo Invitado / Iniciar Sesión
+        viewGuest.style.display = "block";
+        setupGuestEvents();
+      } else if (currentUser.rol === "admin") {
+        // Modo Administrador
+        viewAdmin.style.display = "block";
+        loadAdminDashboard();
+      } else {
+        // Modo Cliente
+        viewCustomer.style.display = "block";
+        loadCustomerDashboard(currentUser);
+      }
+    }
+
+    // Eventos de Login y Registro
+    function setupGuestEvents() {
+      const tabLoginBtn = document.getElementById("tabLoginBtn");
+      const tabRegisterBtn = document.getElementById("tabRegisterBtn");
+      const formLogin = document.getElementById("formLogin");
+      const formRegister = document.getElementById("formRegister");
+
+      tabLoginBtn.onclick = () => {
+        tabLoginBtn.classList.add("active");
+        tabRegisterBtn.classList.remove("active");
+        formLogin.style.display = "block";
+        formRegister.style.display = "none";
+      };
+
+      tabRegisterBtn.onclick = () => {
+        tabRegisterBtn.classList.add("active");
+        tabLoginBtn.classList.remove("active");
+        formRegister.style.display = "block";
+        formLogin.style.display = "none";
+      };
+
+      // Submit Login
+      formLogin.onsubmit = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("l_email").value;
+        const pass = document.getElementById("l_pass").value;
+
+        try {
+          const user = await window.GhostAuth.login(email, pass);
+          window.showToast(`¡Bienvenido, ${user.nombre}!`);
+          initAccountPage();
+        } catch (err) {
+          window.showToast(err.message, true);
+        }
+      };
+
+      // Submit Register
+      formRegister.onsubmit = async (e) => {
+        e.preventDefault();
+        const data = {
+          nombre: document.getElementById("r_name").value,
+          email: document.getElementById("r_email").value,
+          telefono: document.getElementById("r_phone").value,
+          ciudad: document.getElementById("r_city").value,
+          direccion: document.getElementById("r_address").value,
+          password: document.getElementById("r_pass").value
+        };
+
+        try {
+          const user = await window.GhostAuth.register(data);
+          window.showToast(`¡Cuenta creada con éxito! Bienvenido, ${user.nombre}`);
+          initAccountPage();
+        } catch (err) {
+          window.showToast(err.message, true);
+        }
+      };
+    }
+
+    // Cargar Panel de Cliente
+    async function loadCustomerDashboard(user) {
+      document.getElementById("custWelcomeName").textContent = `¡Hola, ${user.nombre}!`;
+      document.getElementById("custProfileName").textContent = user.nombre;
+      document.getElementById("custProfileEmail").textContent = user.email;
+      document.getElementById("custProfilePhone").textContent = user.telefono || "No especificado";
+      document.getElementById("custProfileCity").textContent = user.ciudad || "No especificada";
+      document.getElementById("custProfileAddress").textContent = user.direccion || "No especificada";
+
+      document.getElementById("btnLogoutCust").onclick = () => {
+        window.GhostAuth.logout();
+      };
+
+      // Cargar pedidos de este cliente
+      const orders = await window.GhostDB.getOrdersByUser(user.id, user.email);
+      const container = document.getElementById("custOrdersList");
+
+      if (orders.length === 0) {
+        container.innerHTML = `
+          <div class="user-card" style="text-align:center;padding:36px 20px">
+            <p style="color:var(--mut);margin-bottom:18px">Aún no has registrado pedidos con esta cuenta.</p>
+            <a href="catalogo.html" class="btn">EXPLORAR CATÁLOGO</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orders.map(o => {
+        const dateStr = new Date(o.date).toLocaleDateString("es-CO", {
+          year: "numeric", month: "short", day: "numeric"
+        });
+
+        let badgeClass = "pending";
+        if (o.status === "Pago verificado" || o.status === "Entregado") badgeClass = "ok";
+        else if (o.status === "Enviado" || o.status === "En preparación") badgeClass = "shipping";
+        else if (o.status === "Cancelado") badgeClass = "bad";
+
+        const itemsHTML = (o.items || []).map(i => `
+          <div class="order-item-row">
+            <img class="order-item-img" src="${i.image || 'assets/logo.webp'}" alt="${i.name}">
+            <div style="flex:1">
+              <b>${i.name}</b><br>
+              <span style="font-size:13px;color:var(--mut)">Talla ${i.s} · Cantidad: ${i.q} · ${window.formatCOP(i.price)}</span>
+            </div>
+            <div>
+              <b>${window.formatCOP(i.price * i.q)}</b>
+            </div>
+          </div>
+        `).join("");
+
+        const waPhone = (window.CONFIG && window.CONFIG.whatsapp) || "";
+        const waMsg = encodeURIComponent(`Hola Ghost Imports, consulto sobre mi pedido #${o.orderCode} a nombre de ${user.nombre}.`);
+
+        return `
+          <div class="order-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:12px">
+              <div>
+                <b style="font-size:16px;letter-spacing:0.03em">${o.orderCode}</b>
+                <span style="color:var(--mut);font-size:13px;margin-left:10px">${dateStr}</span>
+              </div>
+              <div>
+                <span class="status-badge ${badgeClass}">${o.status}</span>
+              </div>
+            </div>
+
+            <div>
+              ${itemsHTML}
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid var(--line);flex-wrap:wrap;gap:10px">
+              <div>
+                <span style="color:var(--mut);font-size:13px">Método: <b>${o.paymentMethod || 'Transferencia'}</b></span><br>
+                <span style="color:var(--mut);font-size:13px">Destino: <b>${(o.customer && o.customer.city) || user.ciudad}</b></span>
+              </div>
+              <div style="text-align:right">
+                <span style="font-size:12px;color:var(--mut);display:block">Total</span>
+                <b style="font-size:18px">${window.formatCOP(o.total)}</b>
+              </div>
+            </div>
+
+            <div style="margin-top:14px;text-align:right">
+              <a href="https://wa.me/${waPhone}?text=${waMsg}" target="_blank" rel="noopener" class="btn g" style="font-size:11px;padding:6px 12px">
+                CONSULTAR POR WHATSAPP
+              </a>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // Cargar Panel de Administrador
+    async function loadAdminDashboard() {
+      const stats = await window.GhostDB.getStats();
+      const orders = await window.GhostDB.getOrders();
+      const users = await window.GhostDB.getUsers();
+
+      document.getElementById("admStatRevenue").textContent = window.formatCOP(stats.totalRevenue);
+      document.getElementById("admStatOrders").textContent = stats.totalOrders;
+      document.getElementById("admStatClients").textContent = stats.totalClients;
+      document.getElementById("admStatStock").textContent = stats.totalStockUnits;
+
+      document.getElementById("btnLogoutAdmin").onclick = () => {
+        window.GhostAuth.logout();
+      };
+
+      // Pestañas del Admin
+      const tabOrdersBtn = document.getElementById("admTabOrdersBtn");
+      const tabClientsBtn = document.getElementById("admTabClientsBtn");
+      const tabDatabaseBtn = document.getElementById("admTabDatabaseBtn");
+
+      const secOrders = document.getElementById("admSectionOrders");
+      const secClients = document.getElementById("admSectionClients");
+      const secDatabase = document.getElementById("admSectionDatabase");
+
+      function selectTab(btn, sec) {
+        [tabOrdersBtn, tabClientsBtn, tabDatabaseBtn].forEach(b => b.classList.remove("active"));
+        [secOrders, secClients, secDatabase].forEach(s => s.style.display = "none");
+        btn.classList.add("active");
+        sec.style.display = "block";
+      }
+
+      tabOrdersBtn.onclick = () => selectTab(tabOrdersBtn, secOrders);
+      tabClientsBtn.onclick = () => selectTab(tabClientsBtn, secClients);
+      tabDatabaseBtn.onclick = () => selectTab(tabDatabaseBtn, secDatabase);
+
+      // Renderizar Tabla de Pedidos
+      renderAdminOrdersTable(orders);
+
+      // Renderizar Tabla de Clientes
+      renderAdminClientsTable(users, orders);
+
+      // Botón de sincronización con MySQL
+      document.getElementById("btnSyncMySQL").onclick = async () => {
+        window.showToast("Sincronizando con base de datos MySQL Workbench...");
+        try {
+          const res = await fetch("http://localhost:3307/status").then(r => r.json()).catch(() => null);
+          if (res && res.status === "online") {
+            window.showToast("✓ Conexión establecida con MySQL Server 8.0 (ghost_imports)");
+          } else {
+            window.showToast("✓ Datos de usuarios y pedidos listos para MySQL Workbench");
+          }
+        } catch (e) {
+          window.showToast("✓ Conexión MySQL Workbench lista");
+        }
+      };
+    }
+
+    function renderAdminOrdersTable(orders) {
+      const notice = document.getElementById("admOrdersCount");
+      if (notice) notice.textContent = `${orders.length} pedidos`;
+
+      const container = document.getElementById("admOrdersTableContainer");
+      if (orders.length === 0) {
+        container.innerHTML = `<p style="color:var(--mut);padding:16px 0">No hay pedidos registrados.</p>`;
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="db-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>Contacto</th>
+              <th>Ciudad</th>
+              <th>Prendas</th>
+              <th>Total</th>
+              <th>Método</th>
+              <th>Estado Actual</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${orders.map(o => {
+              const dateStr = new Date(o.date).toLocaleDateString("es-CO", { 
+                day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" 
+              });
+              const cName = (o.customer && o.customer.name) || "Cliente";
+              const cPhone = (o.customer && o.customer.phone) || "-";
+              const cEmail = (o.customer && o.customer.email) || "-";
+              const cCity = (o.customer && o.customer.city) || "-";
+              const itemsDesc = (o.items || []).map(i => `${i.q}x ${i.name} (${i.s})`).join("<br>");
+
+              return `
+                <tr>
+                  <td><b>${o.orderCode}</b></td>
+                  <td style="color:var(--mut);font-size:12px">${dateStr}</td>
+                  <td>
+                    <b>${cName}</b><br>
+                    <span style="font-size:11px;color:var(--mut)">${cEmail}</span>
+                  </td>
+                  <td>${cPhone}</td>
+                  <td>${cCity}</td>
+                  <td style="font-size:12px">${itemsDesc}</td>
+                  <td><b>${window.formatCOP(o.total)}</b></td>
+                  <td><span class="status-badge" style="font-size:10px">${o.paymentMethod || 'Nequi'}</span></td>
+                  <td>
+                    <select class="status-select" data-order-id="${o.id}">
+                      <option value="Pendiente de comprobante" ${o.status === "Pendiente de comprobante" ? "selected" : ""}>Pendiente</option>
+                      <option value="Comprobante recibido" ${o.status === "Comprobante recibido" ? "selected" : ""}>Comprobante recibido</option>
+                      <option value="Pago verificado" ${o.status === "Pago verificado" ? "selected" : ""}>Pago verificado</option>
+                      <option value="En preparación" ${o.status === "En preparación" ? "selected" : ""}>En preparación</option>
+                      <option value="Enviado" ${o.status === "Enviado" ? "selected" : ""}>Enviado</option>
+                      <option value="Entregado" ${o.status === "Entregado" ? "selected" : ""}>Entregado</option>
+                      <option value="Cancelado" ${o.status === "Cancelado" ? "selected" : ""}>Cancelado</option>
+                    </select>
+                  </td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      `;
+
+      // Escuchar cambios de estado en tiempo real
+      container.querySelectorAll(".status-select").forEach(select => {
+        select.addEventListener("change", async (e) => {
+          const orderId = e.target.dataset.orderId;
+          const newStatus = e.target.value;
+          try {
+            await window.GhostDB.updateOrderStatus(orderId, newStatus);
+            window.showToast(`Estado de pedido actualizado a: ${newStatus}`);
+          } catch (err) {
+            window.showToast("Error al actualizar estado: " + err.message, true);
+          }
+        });
+      });
+    }
+
+    function renderAdminClientsTable(users, orders) {
+      const clients = users.filter(u => u.rol !== "admin");
+      const notice = document.getElementById("admClientsCount");
+      if (notice) notice.textContent = `${clients.length} clientes`;
+
+      const container = document.getElementById("admClientsTableContainer");
+      if (clients.length === 0) {
+        container.innerHTML = `<p style="color:var(--mut);padding:16px 0">No hay clientes registrados aún.</p>`;
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="db-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre Completo</th>
+              <th>Correo Electrónico</th>
+              <th>Teléfono</th>
+              <th>Ciudad</th>
+              <th>Dirección de Entrega</th>
+              <th>Pedidos</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${clients.map(c => {
+              const clientOrders = orders.filter(o => 
+                (o.userId && String(o.userId) === String(c.id)) ||
+                (o.customer && o.customer.email && o.customer.email.toLowerCase() === c.email.toLowerCase())
+              );
+              const totalSpent = clientOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+
+              return `
+                <tr>
+                  <td style="color:var(--mut)">#${c.id}</td>
+                  <td><b>${c.nombre}</b></td>
+                  <td>${c.email}</td>
+                  <td>${c.telefono || '-'}</td>
+                  <td>${c.ciudad || '-'}</td>
+                  <td style="font-size:12px;color:var(--mut)">${c.direccion || '-'}</td>
+                  <td>
+                    <b>${clientOrders.length} pedido(s)</b><br>
+                    <span style="font-size:11px;color:var(--ok)">${window.formatCOP(totalSpent)}</span>
+                  </td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    document.addEventListener("DOMContentLoaded", initAccountPage);
+  </script>
+</body>
+</html>

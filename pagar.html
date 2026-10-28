@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Finalizar Pedido | Ghost Imports</title>
+  <meta name="description" content="Finaliza tu compra de prendas streetwear en Ghost Imports con envíos a toda Colombia.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700&display=swap">
+  
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Barra Superior -->
+  <div class="top">Envíos nacionales a toda Colombia · Pagos con Nequi y Bancolombia</div>
+
+  <!-- Cabecera -->
+  <header>
+    <div class="wrap bar">
+      <button class="ib" id="burger" aria-label="Abrir menú" aria-expanded="false">☰</button>
+      
+      <a href="index.html" aria-label="Ghost Imports, inicio">
+        <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
+      </a>
+
+      <nav id="nav" aria-label="Principal">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="catalogo.html?cat=hoodies">Hoodies</a>
+        <a href="catalogo.html?cat=sneakers">Sneakers</a>
+        <a href="catalogo.html?cat=bolsos">Bolsos</a>
+        <a href="catalogo.html?cat=pantalonetas">Pantalonetas</a>
+        <a href="catalogo.html?cat=gorras">Gorras</a>
+        <a href="catalogo.html?cat=novedades">Novedades</a>
+        <a href="cuenta.html">Mi Cuenta</a>
+      </nav>
+
+      <div class="sp"></div>
+
+      <a class="ib" href="catalogo.html" title="Buscar en catálogo" aria-label="Buscar">⌕</a>
+      <a class="ib" href="cuenta.html" id="userBtn" title="Mi Cuenta" aria-label="Mi Cuenta">👤</a>
+      <button type="button" class="ib" id="cbtn" aria-label="Abrir carrito">
+        🛒<span class="cnt" id="cnt">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Checkout Principal -->
+  <main>
+    <div class="wrap co" style="padding:36px 20px 64px">
+      <h2>Finalizar Pedido</h2>
+      <p style="color:var(--mut);margin-bottom:24px">
+        Ingresa tus datos de entrega para coordinar el despacho inmediato de tu pedido.
+      </p>
+
+      <!-- RESUMEN DEL CARRITO CON FOTOS -->
+      <div class="db-panel" style="margin-bottom:28px">
+        <h3 style="font-size:18px;margin-bottom:12px">Resumen de tu Compra</h3>
+        <div id="checkoutCartItems">
+          <!-- Lista de items del carrito con foto -->
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
+          <span style="font-size:16px">Total a pagar:</span>
+          <b id="checkoutTotalAmount" style="font-size:22px">$0 COP</b>
+        </div>
+      </div>
+
+      <!-- FORMULARIO DE ENVÍO -->
+      <form id="checkoutForm" novalidate>
+        <label for="c_name">Nombre y Apellido</label>
+        <input type="text" id="c_name" placeholder="Ej: Santiago Ruiz" required>
+        <div class="er"></div>
+
+        <label for="c_email">Correo Electrónico</label>
+        <input type="email" id="c_email" placeholder="santiago@ejemplo.com" required>
+        <div class="er"></div>
+
+        <label for="c_phone">Número Celular / WhatsApp</label>
+        <input type="tel" id="c_phone" placeholder="3001234567" required>
+        <div class="er"></div>
+
+        <label for="c_city">Ciudad y Departamento</label>
+        <input type="text" id="c_city" placeholder="Ej: Medellín, Antioquia" required>
+        <div class="er"></div>
+
+        <label for="c_address">Dirección de Entrega Completa</label>
+        <input type="text" id="c_address" placeholder="Calle / Carrera, Edificio o Torre, Apto..." required>
+        <div class="er"></div>
+
+        <!-- MÉTODOS DE PAGO -->
+        <fieldset class="pm">
+          <legend>Selecciona tu Método de Pago</legend>
+          <label class="pmo">
+            <input type="radio" name="paymentRadio" value="nequi" checked>
+            <span>Nequi</span>
+          </label>
+          <label class="pmo">
+            <input type="radio" name="paymentRadio" value="bancolombia">
+            <span>Bancolombia</span>
+          </label>
+        </fieldset>
+
+        <div class="note" id="paymentInstructions" aria-live="polite">
+          <!-- Instrucciones de pago -->
+        </div>
+
+        <button type="submit" class="btn" style="width:100%;margin-top:24px">
+          CONFIRMAR Y REGISTRAR PEDIDO
+        </button>
+      </form>
+
+      <!-- RESULTADO EXITOSO TRAS REGISTRAR PEDIDO -->
+      <div id="checkoutSuccess"></div>
+    </div>
+  </main>
+
+  <!-- Pie de Página -->
+  <footer>
+    <div class="wrap fg">
+      <div>
+        <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
+        <p>Moda urbana seleccionada. © <span id="yr"></span> Ghost Imports.</p>
+      </div>
+      <div>
+        <b>Tienda</b>
+        <a href="catalogo.html">Catálogo Completo</a>
+        <a href="catalogo.html?cat=novedades">Novedades (New Drops)</a>
+        <a href="cuenta.html">Mi Cuenta y Pedidos</a>
+        <a href="index.html#servicio">Envíos y Cambios</a>
+      </div>
+      <div>
+        <b>Contacto & Pagos</b>
+        <span class="pend">Transferencias: Nequi y Bancolombia</span>
+        <span class="pend" style="display:block">Atención WhatsApp: disponible al pagar</span>
+        <a href="cuenta.html" style="margin-top:6px;color:var(--sil)">
+          Gestión de Pedidos & Perfil
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sombra de fondo para el Drawer -->
+  <div class="shade" id="shade"></div>
+
+  <!-- Drawer Lateral del Carrito -->
+  <aside class="drawer" id="drawer" aria-label="Carrito de compras" aria-hidden="true">
+    <div class="dh">
+      <h3>Carrito</h3>
+      <button type="button" class="ib" id="cx" aria-label="Cerrar carrito">✕</button>
+    </div>
+    <div class="db" id="cl"></div>
+    <div class="df">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span>Total</span>
+        <b id="tot" style="font-size:18px">$0 COP</b>
+      </div>
+      <button type="button" class="btn" id="go">IR A PAGAR</button>
+    </div>
+  </aside>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status"></div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/store.js"></script>
+  <script>
+    function updateCheckoutSummary() {
+      const itemsContainer = document.getElementById("checkoutCartItems");
+      const totalAmountEl = document.getElementById("checkoutTotalAmount");
+      const cart = window.ghostCart || [];
+
+      if (cart.length === 0) {
+        itemsContainer.innerHTML = `
+          <div class="empty" style="padding:24px 0">
+            No tienes productos en el carrito.
+            <div style="margin-top:14px">
+              <a href="catalogo.html" class="btn">IR AL CATÁLOGO</a>
+            </div>
+          </div>
+        `;
+        document.getElementById("checkoutForm").style.display = "none";
+        totalAmountEl.textContent = "$0 COP";
+        return;
+      }
+
+      const total = cart.reduce((sum, item) => sum + item.price * item.q, 0);
+      totalAmountEl.textContent = window.formatCOP(total);
+
+      itemsContainer.innerHTML = cart.map(item => `
+        <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)">
+          <div style="width:50px;height:50px;background:#000;border:1px solid var(--line);flex-shrink:0">
+            <img src="${item.image || 'assets/logo.webp'}" alt="${item.name}" style="width:100%;height:100%;object-fit:contain">
+          </div>
+          <div style="flex:1">
+            <b>${item.name}</b> (Talla ${item.s})<br>
+            <span style="color:var(--mut);font-size:13px">Cantidad: ${item.q} · ${window.formatCOP(item.price)} c/u</span>
+          </div>
+          <div>
+            <b>${window.formatCOP(item.price * item.q)}</b>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderPaymentInstructions(methodKey) {
+      const pm = (window.CONFIG && window.CONFIG.paymentMethods && window.CONFIG.paymentMethods[methodKey]) || {
+        name: methodKey.toUpperCase(),
+        number: "3001234567",
+        holder: "Ghost Imports",
+        type: "Ahorros"
+      };
+
+      const el = document.getElementById("paymentInstructions");
+      el.innerHTML = `
+        <b>Instrucciones de Pago con ${pm.name}</b><br>
+        ${methodKey === 'bancolombia' ? `Cuenta de ${pm.type}: <b>${pm.number || '3001234567'}</b>` : `Número Nequi: <b>${pm.number || '3001234567'}</b>`}<br>
+        Titular: <b>${pm.holder || 'Ghost Imports'}</b><br>
+        <small style="color:var(--mut);display:block;margin-top:6px">
+          Realiza la transferencia por el total exacto. Una vez confirmado el pedido, podrás adjuntar tu comprobante directamente por WhatsApp.
+        </small>
+      `;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateCheckoutSummary();
+
+      // Autocompletar datos si el usuario tiene sesión activa
+      const currentUser = window.GhostAuth.getCurrentUser();
+      if (currentUser) {
+        if (currentUser.nombre) document.getElementById("c_name").value = currentUser.nombre;
+        if (currentUser.email) document.getElementById("c_email").value = currentUser.email;
+        if (currentUser.telefono) document.getElementById("c_phone").value = currentUser.telefono;
+        if (currentUser.ciudad) document.getElementById("c_city").value = currentUser.ciudad;
+        if (currentUser.direccion) document.getElementById("c_address").value = currentUser.direccion;
+      }
+
+      // Métodos de pago
+      const radios = document.querySelectorAll("input[name=paymentRadio]");
+      radios.forEach(r => {
+        r.addEventListener("change", () => renderPaymentInstructions(r.value));
+      });
+      renderPaymentInstructions("nequi");
+
+      // Validación y envío del formulario
+      const form = document.getElementById("checkoutForm");
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          if (!window.ghostCart || window.ghostCart.length === 0) {
+            window.showToast("Tu carrito está vacío", true);
+            return;
+          }
+
+          const validations = {
+            c_name: (v) => v.trim().length >= 3 || "Escribe tu nombre completo",
+            c_email: (v) => /^\S+@\S+\.\S+$/.test(v) || "Escribe un correo electrónico válido",
+            c_phone: (v) => /^\d{10}$/.test(v.replace(/\D/g, "")) || "Número celular de 10 dígitos requerido",
+            c_city: (v) => v.trim().length >= 2 || "Escribe tu ciudad",
+            c_address: (v) => v.trim().length >= 6 || "Escribe la dirección de entrega completa"
+          };
+
+          let isValid = true;
+          Object.keys(validations).forEach((id) => {
+            const input = document.getElementById(id);
+            const res = validations[id](input.value);
+            const err = input.nextElementSibling;
+            if (res === true) {
+              err.textContent = "";
+            } else {
+              err.textContent = res;
+              isValid = false;
+            }
+          });
+
+          if (!isValid) {
+            window.showToast("Revisa los campos señalados", true);
+            return;
+          }
+
+          const selectedMethod = document.querySelector("input[name=paymentRadio]:checked").value;
+          const cartTotal = window.ghostCart.reduce((sum, item) => sum + item.price * item.q, 0);
+
+          const customer = {
+            name: document.getElementById("c_name").value.trim(),
+            email: document.getElementById("c_email").value.trim(),
+            phone: document.getElementById("c_phone").value.trim(),
+            city: document.getElementById("c_city").value.trim(),
+            address: document.getElementById("c_address").value.trim()
+          };
+
+          try {
+            // Guardar en la base de datos (con enlace a usuario si está autenticado)
+            const activeUser = window.GhostAuth.getCurrentUser();
+            const order = await window.GhostDB.createOrder({
+              userId: activeUser ? activeUser.id : null,
+              customer,
+              paymentMethod: selectedMethod === 'nequi' ? 'Nequi' : 'Bancolombia',
+              items: [...window.ghostCart],
+              total: cartTotal
+            });
+
+            // Vaciar carrito
+            window.ghostCart = [];
+            window.updateCartUI();
+
+            // Ocultar formulario
+            form.style.display = "none";
+            document.getElementById("checkoutCartItems").parentElement.style.display = "none";
+
+            // Mensaje para WhatsApp
+            const waPhone = (window.CONFIG && window.CONFIG.whatsapp) || "";
+            const waMsg = encodeURIComponent(
+              `¡Hola Ghost Imports! Hice el pedido #${order.orderCode} por valor de ${window.formatCOP(cartTotal)} a nombre de ${customer.name}. Pago realizado por ${selectedMethod.toUpperCase()}. Adjunto el comprobante:`
+            );
+
+            document.getElementById("checkoutSuccess").innerHTML = `
+              <div class="note" style="border-color:var(--ok);background:#07140a">
+                <h3 style="margin-bottom:12px;color:var(--ok)">✓ ¡Pedido Registrado con Éxito!</h3>
+                Código de Pedido: <b style="font-size:18px">${order.orderCode}</b><br>
+                Total a transferir: <b style="font-size:18px">${window.formatCOP(cartTotal)}</b><br><br>
+                
+                <b>Método: ${selectedMethod.toUpperCase()}</b><br>
+                Titular: <b>${(window.CONFIG && window.CONFIG.paymentMethods && window.CONFIG.paymentMethods[selectedMethod] && window.CONFIG.paymentMethods[selectedMethod].holder) || 'Ghost Imports'}</b><br>
+                Número de Cuenta / Nequi: <b>${(window.CONFIG && window.CONFIG.paymentMethods && window.CONFIG.paymentMethods[selectedMethod] && window.CONFIG.paymentMethods[selectedMethod].number) || '3001234567'}</b>
+                
+                <div style="margin:24px 0 16px">
+                  ${waPhone ? `
+                    <a class="btn" href="https://wa.me/${waPhone}?text=${waMsg}" target="_blank" rel="noopener" style="display:block;text-align:center">
+                      ENVIAR COMPROBANTE POR WHATSAPP
+                    </a>
+                  ` : `
+                    <a class="btn" href="https://wa.me/?text=${waMsg}" target="_blank" rel="noopener" style="display:block;text-align:center">
+                      ENVIAR COMPROBANTE POR WHATSAPP
+                    </a>
+                  `}
+                </div>
+
+                <div style="display:flex;gap:12px;flex-wrap:wrap">
+                  <a href="cuenta.html" class="btn g" style="font-size:12px;flex:1;text-align:center">
+                    VER ESTADO DE MI PEDIDO
+                  </a>
+                  <a href="catalogo.html" class="btn g" style="font-size:12px;flex:1;text-align:center">
+                    SEGUIR COMPRANDO
+                  </a>
+                </div>
+              </div>
+            `;
+
+            window.showToast("¡Pedido guardado y registrado!");
+          } catch (err) {
+            console.error(err);
+            window.showToast("Error guardando pedido: " + err.message, true);
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
