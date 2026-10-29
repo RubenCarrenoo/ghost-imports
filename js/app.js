@@ -8,10 +8,10 @@ const CONFIG = window.CONFIG || {
   storeName: "Ghost Imports",
   currency: "COP",
   locale: "es-CO",
-  whatsapp: "",
+  whatsapp: "573166045499",
   paymentMethods: {
-    nequi: { name: "Nequi", number: "", holder: "", type: "Billetera digital" },
-    bancolombia: { name: "Bancolombia", number: "", holder: "", type: "Ahorros" }
+    nequi: { name: "Nequi", number: "316 604 5499", holder: "Ghost Imports", type: "Billetera digital" },
+    bancolombia: { name: "Bancolombia", number: "07800043861", holder: "Ghost Imports", type: "Cuenta de Ahorros" }
   }
 };
 
@@ -460,7 +460,7 @@ function checkoutView() {
         <div class="er"></div>
 
         <label for="c_phone">Celular (WhatsApp)</label>
-        <input type="tel" id="c_phone" placeholder="3001234567" autocomplete="tel">
+        <input type="tel" id="c_phone" placeholder="Ej: 316 604 5499" autocomplete="tel">
         <div class="er"></div>
 
         <label for="c_city">Ciudad / Municipio</label>
@@ -601,34 +601,40 @@ function bindCheckoutEvents() {
       // Ocultar formulario y mostrar comprobante exitoso
       form.style.display = "none";
 
-      const waPhone = CONFIG.whatsapp;
-      const waMessage = encodeURIComponent(
-        `¡Hola Ghost Imports! Registré el pedido #${registeredOrder.orderCode} por valor de ${cop(
-          cartSum
-        )} a nombre de ${customerData.name}. Pagado con ${selectedMethod.name}. Adjunto mi comprobante:`
-      );
-
-      $("#checkoutSuccess").innerHTML = `
-        <div class="note" style="border-color:var(--ok);background:#07140a">
-          <h3 style="margin-bottom:10px;color:var(--ok)">✓ Pedido Registrado en Base de Datos</h3>
-          Código de Pedido: <b>${registeredOrder.orderCode}</b><br>
-          Total a pagar: <b>${cop(cartSum)}</b><br><br>
-          ${getPaymentInfoHTML(selectedMethodKey)}
-          <br><br>
-          ${
-            waPhone
-              ? `<a class="btn" href="https://wa.me/${waPhone}?text=${waMessage}" target="_blank" rel="noopener">
-                  ENVIAR COMPROBANTE POR WHATSAPP
-                </a>`
-              : `<span class="pend">Configura tu número de WhatsApp en <code>js/config.js</code> para recibir comprobantes automáticamente.</span>`
-          }
-          <div style="margin-top:20px">
-            <a href="#pedidos" class="btn g" style="font-size:12px">VER MIS PEDIDOS (BASE DE DATOS)</a>
+      // Renderizar comprobante oficial digital completo
+      if (typeof window.renderOrderReceiptHTML === "function") {
+        $("#checkoutSuccess").innerHTML = window.renderOrderReceiptHTML(registeredOrder);
+      } else {
+        const waPhone = CONFIG.whatsapp || "573166045499";
+        const waMessage = encodeURIComponent(
+          `¡Hola Ghost Imports! Registré el pedido #${registeredOrder.orderCode} por valor de ${cop(
+            cartSum
+          )} a nombre de ${customerData.name}. Pagado con ${selectedMethod.name}. Adjunto mi comprobante:`
+        );
+        $("#checkoutSuccess").innerHTML = `
+          <div class="note" style="border-color:var(--ok);background:#07140a">
+            <h3 style="margin-bottom:10px;color:var(--ok)">✓ Pedido Registrado en Base de Datos</h3>
+            Código de Pedido: <b>${registeredOrder.orderCode}</b><br>
+            Total a pagar: <b>${cop(cartSum)}</b><br><br>
+            ${getPaymentInfoHTML(selectedMethodKey)}
+            <br><br>
+            <a class="btn btn-wa-send" href="https://wa.me/${waPhone}?text=${waMessage}" target="_blank" rel="noopener">
+              ENVIAR COMPROBANTE AL WHATSAPP (+57 316 6045499)
+            </a>
           </div>
-        </div>
-      `;
+        `;
+      }
 
-      toast("¡Pedido registrado exitosamente en la base de datos!");
+      // Abrir WhatsApp automáticamente con comprobante
+      const waReceipt = typeof window.formatOrderReceiptText === "function"
+        ? window.formatOrderReceiptText(registeredOrder)
+        : `Pedido #${registeredOrder.orderCode} - ${cop(cartSum)} - ${customerData.name}`;
+      const waUrl = `https://wa.me/${CONFIG.whatsapp || "573166045499"}?text=${encodeURIComponent(waReceipt)}`;
+      setTimeout(() => {
+        try { window.open(waUrl, "_blank"); } catch(e) {}
+      }, 600);
+
+      toast("¡Pedido registrado! Envía tu comprobante a WhatsApp.");
     } catch (err) {
       console.error(err);
       toast("Error al guardar el pedido: " + err.message, true);

@@ -15,7 +15,7 @@
 <body>
 
   <!-- Barra Superior -->
-  <div class="top">Envíos nacionales a toda Colombia · Pagos con Nequi y Bancolombia</div>
+  <div class="top">Envíos nacionales a toda Colombia · Pagos seguros con Nequi y Bancolombia</div>
 
   <!-- Cabecera -->
   <header>
@@ -92,7 +92,7 @@
             <input type="email" id="r_email" placeholder="santiago@correo.com" required>
 
             <label for="r_phone">Número Celular / WhatsApp</label>
-            <input type="tel" id="r_phone" placeholder="3001234567" required>
+            <input type="tel" id="r_phone" placeholder="Ej: 316 604 5499" required>
 
             <label for="r_city">Ciudad y Departamento</label>
             <input type="text" id="r_city" placeholder="Ej: Medellín, Antioquia" required>
@@ -299,7 +299,7 @@
       <div>
         <b>Contacto & Pagos</b>
         <span class="pend">Transferencias: Nequi y Bancolombia</span>
-        <span class="pend" style="display:block">Atención WhatsApp: disponible al pagar</span>
+        <span class="pend" style="display:block;margin-top:6px">Envío de comprobante al confirmar tu pedido</span>
         <a href="cuenta.html" style="margin-top:6px;color:var(--sil)">
           Gestión de Pedidos & Perfil
         </a>
@@ -472,11 +472,13 @@
           </div>
         `).join("");
 
-        const waPhone = (window.CONFIG && window.CONFIG.whatsapp) || "";
-        const waMsg = encodeURIComponent(`Hola Ghost Imports, consulto sobre mi pedido #${o.orderCode} a nombre de ${user.nombre}.`);
+        const waPhone = (window.CONFIG && window.CONFIG.whatsapp) || "573166045499";
+        const receiptText = window.formatOrderReceiptText(o);
+        const waMsg = encodeURIComponent(receiptText);
+        const receiptHtml = window.renderOrderReceiptHTML(o);
 
         return `
-          <div class="order-card">
+          <div class="order-card" id="card-${o.orderCode}">
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:12px">
               <div>
                 <b style="font-size:16px;letter-spacing:0.03em">${o.orderCode}</b>
@@ -502,10 +504,19 @@
               </div>
             </div>
 
-            <div style="margin-top:14px;text-align:right">
-              <a href="https://wa.me/${waPhone}?text=${waMsg}" target="_blank" rel="noopener" class="btn g" style="font-size:11px;padding:6px 12px">
-                CONSULTAR POR WHATSAPP
+            <!-- Botones de Acción para Comprobante y WhatsApp -->
+            <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+              <button type="button" class="btn g" style="font-size:11px;padding:8px 14px" onclick="document.getElementById('receipt-box-${o.orderCode}').style.display = document.getElementById('receipt-box-${o.orderCode}').style.display === 'none' ? 'block' : 'none'">
+                📄 VER COMPROBANTE OFICIAL
+              </button>
+              <a href="https://wa.me/${waPhone}?text=${waMsg}" target="_blank" rel="noopener noreferrer" class="btn btn-wa-send" style="font-size:11px;padding:8px 14px">
+                📲 ENVIAR A WHATSAPP (+57 316 6045499)
               </a>
+            </div>
+
+            <!-- Contenedor desplegable del Comprobante Oficial -->
+            <div id="receipt-box-${o.orderCode}" style="display:none;margin-top:18px;border-top:1px dashed var(--line);padding-top:18px">
+              ${receiptHtml}
             </div>
           </div>
         `;
@@ -580,60 +591,62 @@
       }
 
       container.innerHTML = `
-        <table class="db-table">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Fecha</th>
-              <th>Cliente</th>
-              <th>Contacto</th>
-              <th>Ciudad</th>
-              <th>Prendas</th>
-              <th>Total</th>
-              <th>Método</th>
-              <th>Estado Actual</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${orders.map(o => {
-              const dateStr = new Date(o.date).toLocaleDateString("es-CO", { 
-                day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" 
-              });
-              const cName = (o.customer && o.customer.name) || "Cliente";
-              const cPhone = (o.customer && o.customer.phone) || "-";
-              const cEmail = (o.customer && o.customer.email) || "-";
-              const cCity = (o.customer && o.customer.city) || "-";
-              const itemsDesc = (o.items || []).map(i => `${i.q}x ${i.name} (${i.s})`).join("<br>");
+        <div class="db-table-wrap">
+          <table class="db-table">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Contacto</th>
+                <th>Ciudad</th>
+                <th>Prendas</th>
+                <th>Total</th>
+                <th>Método</th>
+                <th>Estado Actual</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${orders.map(o => {
+                const dateStr = new Date(o.date).toLocaleDateString("es-CO", { 
+                  day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" 
+                });
+                const cName = (o.customer && o.customer.name) || "Cliente";
+                const cPhone = (o.customer && o.customer.phone) || "-";
+                const cEmail = (o.customer && o.customer.email) || "-";
+                const cCity = (o.customer && o.customer.city) || "-";
+                const itemsDesc = (o.items || []).map(i => `${i.q}x ${i.name} (${i.s})`).join("<br>");
 
-              return `
-                <tr>
-                  <td><b>${o.orderCode}</b></td>
-                  <td style="color:var(--mut);font-size:12px">${dateStr}</td>
-                  <td>
-                    <b>${cName}</b><br>
-                    <span style="font-size:11px;color:var(--mut)">${cEmail}</span>
-                  </td>
-                  <td>${cPhone}</td>
-                  <td>${cCity}</td>
-                  <td style="font-size:12px">${itemsDesc}</td>
-                  <td><b>${window.formatCOP(o.total)}</b></td>
-                  <td><span class="status-badge" style="font-size:10px">${o.paymentMethod || 'Nequi'}</span></td>
-                  <td>
-                    <select class="status-select" data-order-id="${o.id}">
-                      <option value="Pendiente de comprobante" ${o.status === "Pendiente de comprobante" ? "selected" : ""}>Pendiente</option>
-                      <option value="Comprobante recibido" ${o.status === "Comprobante recibido" ? "selected" : ""}>Comprobante recibido</option>
-                      <option value="Pago verificado" ${o.status === "Pago verificado" ? "selected" : ""}>Pago verificado</option>
-                      <option value="En preparación" ${o.status === "En preparación" ? "selected" : ""}>En preparación</option>
-                      <option value="Enviado" ${o.status === "Enviado" ? "selected" : ""}>Enviado</option>
-                      <option value="Entregado" ${o.status === "Entregado" ? "selected" : ""}>Entregado</option>
-                      <option value="Cancelado" ${o.status === "Cancelado" ? "selected" : ""}>Cancelado</option>
-                    </select>
-                  </td>
-                </tr>
-              `;
-            }).join("")}
-          </tbody>
-        </table>
+                return `
+                  <tr>
+                    <td><b>${o.orderCode}</b></td>
+                    <td style="color:var(--mut);font-size:12px">${dateStr}</td>
+                    <td>
+                      <b>${cName}</b><br>
+                      <span style="font-size:11px;color:var(--mut)">${cEmail}</span>
+                    </td>
+                    <td>${cPhone}</td>
+                    <td>${cCity}</td>
+                    <td style="font-size:12px">${itemsDesc}</td>
+                    <td><b>${window.formatCOP(o.total)}</b></td>
+                    <td><span class="status-badge" style="font-size:10px">${o.paymentMethod || 'Nequi'}</span></td>
+                    <td>
+                      <select class="status-select" data-order-id="${o.id}">
+                        <option value="Pendiente de comprobante" ${o.status === "Pendiente de comprobante" ? "selected" : ""}>Pendiente</option>
+                        <option value="Comprobante recibido" ${o.status === "Comprobante recibido" ? "selected" : ""}>Comprobante recibido</option>
+                        <option value="Pago verificado" ${o.status === "Pago verificado" ? "selected" : ""}>Pago verificado</option>
+                        <option value="En preparación" ${o.status === "En preparación" ? "selected" : ""}>En preparación</option>
+                        <option value="Enviado" ${o.status === "Enviado" ? "selected" : ""}>Enviado</option>
+                        <option value="Entregado" ${o.status === "Entregado" ? "selected" : ""}>Entregado</option>
+                        <option value="Cancelado" ${o.status === "Cancelado" ? "selected" : ""}>Cancelado</option>
+                      </select>
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
       `;
 
       // Escuchar cambios de estado en tiempo real
@@ -663,43 +676,45 @@
       }
 
       container.innerHTML = `
-        <table class="db-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre Completo</th>
-              <th>Correo Electrónico</th>
-              <th>Teléfono</th>
-              <th>Ciudad</th>
-              <th>Dirección de Entrega</th>
-              <th>Pedidos</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${clients.map(c => {
-              const clientOrders = orders.filter(o => 
-                (o.userId && String(o.userId) === String(c.id)) ||
-                (o.customer && o.customer.email && o.customer.email.toLowerCase() === c.email.toLowerCase())
-              );
-              const totalSpent = clientOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+        <div class="db-table-wrap">
+          <table class="db-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre Completo</th>
+                <th>Correo Electrónico</th>
+                <th>Teléfono</th>
+                <th>Ciudad</th>
+                <th>Dirección de Entrega</th>
+                <th>Pedidos</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${clients.map(c => {
+                const clientOrders = orders.filter(o => 
+                  (o.userId && String(o.userId) === String(c.id)) ||
+                  (o.customer && o.customer.email && o.customer.email.toLowerCase() === c.email.toLowerCase())
+                );
+                const totalSpent = clientOrders.reduce((sum, o) => sum + (o.total || 0), 0);
 
-              return `
-                <tr>
-                  <td style="color:var(--mut)">#${c.id}</td>
-                  <td><b>${c.nombre}</b></td>
-                  <td>${c.email}</td>
-                  <td>${c.telefono || '-'}</td>
-                  <td>${c.ciudad || '-'}</td>
-                  <td style="font-size:12px;color:var(--mut)">${c.direccion || '-'}</td>
-                  <td>
-                    <b>${clientOrders.length} pedido(s)</b><br>
-                    <span style="font-size:11px;color:var(--ok)">${window.formatCOP(totalSpent)}</span>
-                  </td>
-                </tr>
-              `;
-            }).join("")}
-          </tbody>
-        </table>
+                return `
+                  <tr>
+                    <td style="color:var(--mut)">#${c.id}</td>
+                    <td><b>${c.nombre}</b></td>
+                    <td>${c.email}</td>
+                    <td>${c.telefono || '-'}</td>
+                    <td>${c.ciudad || '-'}</td>
+                    <td style="font-size:12px;color:var(--mut)">${c.direccion || '-'}</td>
+                    <td>
+                      <b>${clientOrders.length} pedido(s)</b><br>
+                      <span style="font-size:11px;color:var(--ok)">${window.formatCOP(totalSpent)}</span>
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
       `;
     }
 

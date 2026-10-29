@@ -8,35 +8,36 @@ const CONFIG = {
   currency: "COP",
   locale: "es-CO",
 
-  // Número de WhatsApp para confirmación de pedidos (Formato internacional sin +, ej: 573001234567)
-  whatsapp: "", // Completa con tu número real, ej: "573001234567"
+  // Número de WhatsApp para confirmación de pedidos (Formato internacional sin +, ej: 573166045499)
+  whatsapp: "573166045499",
+  whatsappFormatted: "+57 316 6045499",
 
   // Métodos de pago oficiales en Colombia (transferencias manuales)
   paymentMethods: {
     nequi: {
       name: "Nequi",
-      number: "", // Ej: '3001234567'
-      holder: "", // Ej: 'Juan Pérez'
+      number: "316 604 5499",
+      holder: "Ghost Imports",
       type: "Billetera digital"
     },
     bancolombia: {
       name: "Bancolombia",
-      number: "", // Ej: '12345678901'
-      holder: "", // Ej: 'Juan Pérez'
-      type: "Ahorros" // 'Ahorros' o 'Corriente'
+      number: "07800043861",
+      holder: "Ghost Imports",
+      type: "Cuenta de Ahorros"
     }
   },
 
   // Envíos e información comercial
   shipping: {
-    nationalNotice: "Envíos nacionales: condiciones por confirmar antes de publicar",
+    nationalNotice: "Envíos nacionales a toda Colombia con seguimiento por guía",
     citiesCovered: "Cobertura a nivel nacional en Colombia"
   },
 
   // Redes sociales y contacto
   social: {
     instagram: "@ghostimports",
-    whatsappSupport: ""
+    whatsappSupport: "573166045499"
   }
 };
 

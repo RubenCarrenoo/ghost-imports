@@ -365,6 +365,14 @@ nav a.on {
   grid-column: span 2;
 }
 
+.cat-text {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+}
+
 .cat h3 {
   font-size: 24px;
   position: relative;
@@ -1322,45 +1330,396 @@ footer {
 }
 
 /* --------------------------------------------------------------------------
-   18. SISTEMA DE RESPONSIVIDAD (COMPUTADORA, TABLET & CELULAR)
+   18. ESTILOS DE COMPROBANTE OFICIAL DIGITAL & BOTÓN WHATSAPP (+57 316 6045499)
+   -------------------------------------------------------------------------- */
+
+/* Botón Destacado de Envío a WhatsApp */
+.btn-wa-send {
+  background: #25D366 !important;
+  color: #000000 !important;
+  border: 1px solid #25D366 !important;
+  font-weight: 800 !important;
+  font-size: 13.5px !important;
+  letter-spacing: 0.04em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 14px 20px !important;
+  border-radius: 4px !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 18px rgba(37, 211, 102, 0.35) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.btn-wa-send:hover {
+  background: #20bd5a !important;
+  color: #000000 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5) !important;
+}
+
+.btn-wa-send svg {
+  flex-shrink: 0;
+}
+
+.btn-copied {
+  background: var(--ok) !important;
+  color: #000 !important;
+  border-color: var(--ok) !important;
+}
+
+/* WhatsApp solo disponible al momento del pago */
+.wa-floating-btn {
+  display: none !important;
+}
+
+/* Tarjeta Oficial de Comprobante Digital Ghost Imports */
+.comprobante-card {
+  background: linear-gradient(180deg, #131417 0%, #08080a 100%);
+  border: 1px solid #33363d;
+  border-radius: 6px;
+  padding: 24px;
+  margin: 20px 0;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
+  color: var(--ink);
+}
+
+.comprobante-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 16px;
+  margin-bottom: 18px;
+}
+
+.comprobante-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.comprobante-logo {
+  height: 38px;
+  mix-blend-mode: lighten;
+}
+
+.comprobante-brand h3 {
+  font-size: 18px;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.comprobante-tag {
+  font-size: 10.5px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  display: block;
+  margin-top: 2px;
+}
+
+.comprobante-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.comprobante-box {
+  background: #000;
+  border: 1px solid var(--line);
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.comprobante-box small {
+  display: block;
+  color: var(--mut);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.comprobante-box b {
+  font-size: 14.5px;
+  color: var(--ink);
+  word-break: break-word;
+}
+
+.comprobante-highlight {
+  color: var(--accent) !important;
+  font-size: 17px !important;
+}
+
+.comprobante-price {
+  color: var(--ok) !important;
+  font-size: 17px !important;
+}
+
+.comprobante-section {
+  border-top: 1px solid var(--line);
+  padding: 18px 0;
+}
+
+.comprobante-section h4 {
+  font-size: 13.5px;
+  color: var(--sil);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.comprobante-client-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 16px;
+  font-size: 13.5px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #1f2024;
+  padding: 14px;
+  border-radius: 4px;
+}
+
+.comprobante-client-grid span {
+  color: var(--mut);
+  margin-right: 6px;
+}
+
+.comprobante-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.comprobante-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: #000;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.comprobante-item-img {
+  width: 44px;
+  height: 44px;
+  background: #111;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+.comprobante-item-img img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.comprobante-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.comprobante-item-info b {
+  font-size: 13.5px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.comprobante-meta {
+  font-size: 12px;
+  color: var(--mut);
+}
+
+.comprobante-item-total {
+  text-align: right;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.comprobante-totals-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: 13.5px;
+  border-top: 1px solid var(--line);
+}
+
+.comprobante-totals-row.final {
+  font-size: 17px;
+  font-weight: 700;
+  background: #000;
+  border: 1px solid var(--line);
+  margin-top: 6px;
+  border-radius: 4px;
+}
+
+.comprobante-totals-row.final b {
+  color: var(--ok);
+  font-size: 20px;
+}
+
+.comprobante-bank-card {
+  background: #141209;
+  border: 1px solid #5a4b1e;
+  border-radius: 4px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.comprobante-bank-title {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.comprobante-bank-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 16px;
+  font-size: 13.5px;
+}
+
+.comprobante-acc-number {
+  font-size: 16px;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+.comprobante-bank-note {
+  font-size: 12.5px;
+  color: var(--mut);
+  margin: 12px 0 0;
+  line-height: 1.5;
+}
+
+.comprobante-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.comprobante-subactions,
+.comprobante-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.comprobante-subactions button,
+.comprobante-links a {
+  flex: 1;
+  min-width: 140px;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   19. SISTEMA DE RESPONSIVIDAD TOTAL (COMPUTADORA, TABLET & CELULAR)
    -------------------------------------------------------------------------- */
 
 /* TABLETS Y LAPTOPS MEDIANAS (<= 960px) */
+/* Soporte global para menú desplegable sin bugs */
+body.menu-open {
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+
+header.menu-open {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: #08080a !important;
+  z-index: 99999 !important;
+}
+
 @media (max-width: 960px) {
   #burger {
-    display: grid;
+    display: grid !important;
     place-items: center;
-    z-index: 100;
+    z-index: 100000 !important;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    border: 1px solid var(--line);
+    background: transparent;
+  }
+
+  #burger * {
+    pointer-events: none;
   }
 
   nav {
     display: none;
-    position: fixed;
-    top: 64px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(7, 7, 9, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    flex-direction: column;
-    margin: 0;
-    padding: 24px 20px;
-    border-bottom: 1px solid var(--line);
-    gap: 6px;
-    z-index: 95;
-    overflow-y: auto;
+    position: fixed !important;
+    top: 64px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: calc(100dvh - 64px) !important;
+    background: #08080a !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    flex-direction: column !important;
+    margin: 0 !important;
+    padding: 20px 20px calc(30px + env(safe-area-inset-bottom, 0px)) !important;
+    border-top: 1px solid var(--line);
+    gap: 8px !important;
+    z-index: 99999 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   nav.open {
-    display: flex;
+    display: flex !important;
+    animation: fadeInNav 0.2s ease-out;
+  }
+
+  @keyframes fadeInNav {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   nav a {
     padding: 14px 16px;
-    font-size: 17px;
+    font-size: 16px;
     border-radius: 4px;
     border-bottom: 1px solid #1a1a1f;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  nav a::after {
+    content: "→";
+    color: var(--mut);
+    font-size: 14px;
   }
 
   nav a:hover,
@@ -1427,6 +1786,10 @@ footer {
     grid-template-columns: repeat(3, 1fr);
     gap: 14px;
   }
+
+  .comprobante-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* TABLETS VERTICALES Y SMARTPHONES GRANDES (<= 768px) */
@@ -1437,12 +1800,14 @@ footer {
   }
 
   .hero h1 {
-    font-size: clamp(28px, 7vw, 46px);
+    font-size: clamp(28px, 7vw, 44px);
+    max-width: 100%;
   }
 
   .hero p {
     font-size: 16px;
     margin: 12px 0 22px;
+    max-width: 100%;
   }
 
   .hero .row {
@@ -1492,41 +1857,64 @@ footer {
     padding: 10px 14px;
     font-size: 12px;
   }
+
+  .comprobante-client-grid,
+  .comprobante-bank-details {
+    grid-template-columns: 1fr;
+  }
 }
 
-/* SMARTPHONES / CELULARES (<= 540px) */
+/* SMARTPHONES Y CELULARES (<= 540px) */
 @media (max-width: 540px) {
   .wrap {
     padding: 0 14px;
   }
 
   header {
-    height: 64px;
+    height: 60px;
+  }
+
+  header.menu-open {
+    height: auto !important;
+  }
+
+  header.menu-open nav {
+    top: 60px !important;
+    height: calc(100dvh - 60px) !important;
   }
 
   header .bar {
-    height: 64px;
+    height: 60px;
+    gap: 8px;
   }
 
   .top {
     font-size: 11px;
     padding: 7px 10px;
+    line-height: 1.4;
   }
 
   #userBtn {
-    max-width: 90px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 0 8px;
-    font-size: 12px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    padding: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 15px;
+  }
+
+  #userBtn .u-name {
+    display: none;
   }
 
   .bar {
-    gap: 10px;
+    gap: 8px;
   }
 
   .bar .lg {
-    height: 38px;
+    height: 36px;
   }
 
   .ib {
@@ -1534,27 +1922,80 @@ footer {
     height: 38px;
   }
 
+  /* Colecciones en Celular: Fila ultra limpia sin aplastamiento */
   .cats {
-    grid-template-columns: 1fr;
-    gap: 10px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
   }
 
   .cat {
-    min-height: 165px !important;
+    min-height: 96px !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 12px 14px !important;
+    background: linear-gradient(135deg, #16171b 0%, #07080a 100%) !important;
+    border: 1px solid #28292d !important;
+    border-radius: 6px;
+  }
+
+  .cat:nth-child(n) {
     grid-column: auto !important;
-    padding: 14px;
+    min-height: 96px !important;
+  }
+
+  .cat-text {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    margin-top: 0 !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .cat .ph {
+    position: static !important;
+    display: block !important;
+    font-size: 9.5px !important;
+    letter-spacing: 0.12em !important;
+    color: var(--accent) !important;
+    margin-bottom: 2px !important;
+  }
+
+  .cat h3 {
+    font-size: 16px !important;
+    line-height: 1.25 !important;
+    margin: 2px 0 !important;
+    color: var(--ink) !important;
+    white-space: normal !important;
+    word-break: normal !important;
+  }
+
+  .cat small {
+    display: block !important;
+    font-size: 11.5px !important;
+    color: var(--mut) !important;
+    margin-top: 2px !important;
   }
 
   .cat-bg-img {
-    width: 110px !important;
-    height: 110px !important;
-    top: 10px !important;
-    right: 10px !important;
+    position: static !important;
+    width: 74px !important;
+    height: 74px !important;
+    object-fit: contain !important;
+    margin-left: 10px !important;
+    flex-shrink: 0 !important;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.8)) !important;
+    opacity: 1 !important;
   }
 
+  /* Grid de Productos: 2 columnas perfectas para celular */
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    gap: 10px;
   }
 
   .card-img-box {
@@ -1562,85 +2003,86 @@ footer {
   }
 
   .cb {
-    padding: 8px 6px;
+    padding: 10px 8px;
     gap: 4px;
+  }
+
+  .cb .br {
+    font-size: 11px;
   }
 
   .cb b {
     font-size: 12.5px;
-    line-height: 1.25;
-    min-height: 32px;
+    line-height: 1.3;
+    min-height: 34px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .pr {
     font-size: 13.5px;
   }
 
+  .av {
+    font-size: 10.5px;
+  }
+
   .cb .row {
     flex-direction: column;
     gap: 6px;
-    padding-top: 4px;
+    padding-top: 6px;
   }
 
   .cb .btn {
     width: 100%;
-    padding: 8px 4px;
-    font-size: 10.5px;
+    padding: 9px 4px;
+    font-size: 11px;
     letter-spacing: 0.02em;
   }
 
+  /* Carrito Drawer en celular */
   .drawer {
     width: 100vw;
   }
 
   .dh,
   .df {
-    padding: 12px 16px;
+    padding: 14px 16px;
   }
 
   .db {
-    padding: 6px 14px;
+    padding: 8px 14px;
   }
 
-  .auth-box {
-    margin: 16px auto;
-    padding: 22px 16px;
-    border-left: 0;
-    border-right: 0;
-  }
-
-  .user-card {
-    padding: 16px;
-  }
-
-  .order-card {
+  /* Filtros del Catálogo en Móvil */
+  .filters {
+    grid-template-columns: repeat(2, 1fr) !important;
     padding: 14px;
-  }
-
-  .order-item-row {
     gap: 10px;
-    padding: 8px 0;
   }
 
-  .order-item-img {
-    width: 44px;
-    height: 44px;
+  .filters .f-full,
+  .filters .f-actions {
+    grid-column: 1 / -1;
   }
 
+  /* Detalle de Producto en celular */
   .pd-img-box {
-    max-height: 360px;
+    max-height: 340px;
     padding: 14px;
   }
 
   .pd-img-box img {
-    max-height: 300px;
+    max-height: 280px;
   }
 
   .sz button {
     min-width: 48px;
-    min-height: 44px;
-    font-size: 14px;
-    padding: 8px;
+    min-height: 48px;
+    font-size: 14.5px;
+    padding: 10px;
   }
 
   .pd .row {
@@ -1652,8 +2094,9 @@ footer {
     width: 100%;
   }
 
+  /* Checkout en Celular */
   .wrap.co {
-    padding: 20px 12px 48px !important;
+    padding: 20px 12px calc(48px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   input,
@@ -1669,6 +2112,69 @@ footer {
 
   .pmo {
     padding: 12px;
+  }
+
+  /* Comprobante en Celular */
+  .comprobante-card {
+    padding: 16px 12px;
+    margin: 16px 0;
+  }
+
+  .comprobante-summary-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .comprobante-box {
+    padding: 10px 8px;
+  }
+
+  .comprobante-box small {
+    font-size: 9.5px;
+  }
+
+  .comprobante-box b {
+    font-size: 13.5px;
+  }
+
+  .comprobante-highlight {
+    font-size: 15px !important;
+  }
+
+  .comprobante-price {
+    font-size: 15px !important;
+  }
+
+  .comprobante-item {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .comprobante-item-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .btn-wa-send {
+    font-size: 12.5px !important;
+    padding: 13px 12px !important;
+    width: 100%;
+    text-align: center;
+  }
+
+  .comprobante-subactions,
+  .comprobante-links {
+    flex-direction: column;
+  }
+
+  .comprobante-subactions button,
+  .comprobante-links a {
+    width: 100%;
+  }
+
+  /* Botón Flotante de WhatsApp Desactivado */
+  .wa-floating-btn {
+    display: none !important;
   }
 
   footer {
@@ -1691,10 +2197,66 @@ footer {
   .db-stat-grid {
     grid-template-columns: 1fr;
   }
+
+  .comprobante-summary-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* --------------------------------------------------------------------------
-   18. ACCESIBILIDAD (PREFERS-REDUCED-MOTION)
+   20. ESTILOS DE IMPRESIÓN (PRINT STYLES FOR COMPROBANTE)
+   -------------------------------------------------------------------------- */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  header,
+  footer,
+  .top,
+  .wa-floating-btn,
+  .drawer,
+  .shade,
+  .toast,
+  .comprobante-actions,
+  #burger {
+    display: none !important;
+  }
+
+  .comprobante-card {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+    padding: 20px !important;
+    margin: 0 !important;
+  }
+
+  .comprobante-logo {
+    filter: invert(1);
+  }
+
+  .comprobante-box,
+  .comprobante-client-grid,
+  .comprobante-item,
+  .comprobante-bank-card,
+  .comprobante-totals-row.final {
+    background: #f8f8f8 !important;
+    border-color: #cccccc !important;
+    color: #000000 !important;
+  }
+
+  .comprobante-box b,
+  .comprobante-highlight,
+  .comprobante-price,
+  .comprobante-totals-row.final b {
+    color: #000000 !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   21. ACCESIBILIDAD (PREFERS-REDUCED-MOTION)
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -1703,3 +2265,4 @@ footer {
     scroll-behavior: auto !important;
   }
 }
+

@@ -15,7 +15,7 @@
 <body>
 
   <!-- Barra Superior -->
-  <div class="top">Envíos nacionales a toda Colombia · Pagos con Nequi y Bancolombia</div>
+  <div class="top">Envíos nacionales a toda Colombia · Pagos seguros con Nequi y Bancolombia</div>
 
   <!-- Cabecera -->
   <header>
@@ -79,7 +79,7 @@
         <div class="er"></div>
 
         <label for="c_phone">Número Celular / WhatsApp</label>
-        <input type="tel" id="c_phone" placeholder="3001234567" required>
+        <input type="tel" id="c_phone" placeholder="Ej: 316 604 5499" required>
         <div class="er"></div>
 
         <label for="c_city">Ciudad y Departamento</label>
@@ -134,7 +134,7 @@
       <div>
         <b>Contacto & Pagos</b>
         <span class="pend">Transferencias: Nequi y Bancolombia</span>
-        <span class="pend" style="display:block">Atención WhatsApp: disponible al pagar</span>
+        <span class="pend" style="display:block;margin-top:6px">Envío de comprobante al confirmar tu pedido</span>
         <a href="cuenta.html" style="margin-top:6px;color:var(--sil)">
           Gestión de Pedidos & Perfil
         </a>
@@ -209,20 +209,26 @@
     }
 
     function renderPaymentInstructions(methodKey) {
-      const pm = (window.CONFIG && window.CONFIG.paymentMethods && window.CONFIG.paymentMethods[methodKey]) || {
-        name: methodKey.toUpperCase(),
-        number: "3001234567",
+      const isBancolombia = methodKey === 'bancolombia';
+      const pm = (window.CONFIG && window.CONFIG.paymentMethods && window.CONFIG.paymentMethods[methodKey]) || (isBancolombia ? {
+        name: "Bancolombia",
+        number: "07800043861",
         holder: "Ghost Imports",
-        type: "Ahorros"
-      };
+        type: "Cuenta de Ahorros"
+      } : {
+        name: "Nequi",
+        number: "316 604 5499",
+        holder: "Ghost Imports",
+        type: "Billetera digital"
+      });
 
       const el = document.getElementById("paymentInstructions");
       el.innerHTML = `
         <b>Instrucciones de Pago con ${pm.name}</b><br>
-        ${methodKey === 'bancolombia' ? `Cuenta de ${pm.type}: <b>${pm.number || '3001234567'}</b>` : `Número Nequi: <b>${pm.number || '3001234567'}</b>`}<br>
+        ${isBancolombia ? `Cuenta de Ahorros Bancolombia: <b style="font-size:16px;letter-spacing:0.04em">${pm.number || '07800043861'}</b>` : `Número Nequi: <b style="font-size:16px;letter-spacing:0.04em">${pm.number || '316 604 5499'}</b>`}<br>
         Titular: <b>${pm.holder || 'Ghost Imports'}</b><br>
         <small style="color:var(--mut);display:block;margin-top:6px">
-          Realiza la transferencia por el total exacto. Una vez confirmado el pedido, podrás adjuntar tu comprobante directamente por WhatsApp.
+          Realiza la transferencia por el total exacto. Al confirmar el pedido, tu comprobante oficial se generará automáticamente y serás redirigido a WhatsApp para enviarlo al número <b>+57 316 6045499</b>.
         </small>
       `;
     }
@@ -314,46 +320,23 @@
             form.style.display = "none";
             document.getElementById("checkoutCartItems").parentElement.style.display = "none";
 
-            // Mensaje para WhatsApp
-            const waPhone = (window.CONFIG && window.CONFIG.whatsapp) || "";
-            const waMsg = encodeURIComponent(
-              `¡Hola Ghost Imports! Hice el pedido #${order.orderCode} por valor de ${window.formatCOP(cartTotal)} a nombre de ${customer.name}. Pago realizado por ${selectedMethod.toUpperCase()}. Adjunto el comprobante:`
-            );
+            // Generar y renderizar comprobante oficial digital completo de Ghost Imports
+            const successContainer = document.getElementById("checkoutSuccess");
+            successContainer.innerHTML = window.renderOrderReceiptHTML(order);
+            successContainer.scrollIntoView({ behavior: "smooth", block: "start" });
 
-            document.getElementById("checkoutSuccess").innerHTML = `
-              <div class="note" style="border-color:var(--ok);background:#07140a">
-                <h3 style="margin-bottom:12px;color:var(--ok)">✓ ¡Pedido Registrado con Éxito!</h3>
-                Código de Pedido: <b style="font-size:18px">${order.orderCode}</b><br>
-                Total a transferir: <b style="font-size:18px">${window.formatCOP(cartTotal)}</b><br><br>
-                
-                <b>Método: ${selectedMethod.toUpperCase()}</b><br>
-                Titular: <b>${(window.CONFIG && window.CONFIG.paymentMethods && window.CONFIG.paymentMethods[selectedMethod] && window.CONFIG.paymentMethods[selectedMethod].holder) || 'Ghost Imports'}</b><br>
-                Número de Cuenta / Nequi: <b>${(window.CONFIG && window.CONFIG.paymentMethods && window.CONFIG.paymentMethods[selectedMethod] && window.CONFIG.paymentMethods[selectedMethod].number) || '3001234567'}</b>
-                
-                <div style="margin:24px 0 16px">
-                  ${waPhone ? `
-                    <a class="btn" href="https://wa.me/${waPhone}?text=${waMsg}" target="_blank" rel="noopener" style="display:block;text-align:center">
-                      ENVIAR COMPROBANTE POR WHATSAPP
-                    </a>
-                  ` : `
-                    <a class="btn" href="https://wa.me/?text=${waMsg}" target="_blank" rel="noopener" style="display:block;text-align:center">
-                      ENVIAR COMPROBANTE POR WHATSAPP
-                    </a>
-                  `}
-                </div>
+            // Abrir automáticamente WhatsApp con el comprobante oficial pre-cargado
+            const waPhone = (window.CONFIG && window.CONFIG.whatsapp) || "573166045499";
+            const receiptText = window.formatOrderReceiptText(order);
+            const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(receiptText)}`;
 
-                <div style="display:flex;gap:12px;flex-wrap:wrap">
-                  <a href="cuenta.html" class="btn g" style="font-size:12px;flex:1;text-align:center">
-                    VER ESTADO DE MI PEDIDO
-                  </a>
-                  <a href="catalogo.html" class="btn g" style="font-size:12px;flex:1;text-align:center">
-                    SEGUIR COMPRANDO
-                  </a>
-                </div>
-              </div>
-            `;
+            setTimeout(() => {
+              try {
+                window.open(waUrl, "_blank");
+              } catch (e) {}
+            }, 600);
 
-            window.showToast("¡Pedido guardado y registrado!");
+            window.showToast("✓ ¡Pedido registrado! Envía tu comprobante a WhatsApp.");
           } catch (err) {
             console.error(err);
             window.showToast("Error guardando pedido: " + err.message, true);

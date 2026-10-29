@@ -223,8 +223,8 @@ INSERT INTO categorias (id, nombre, marca_predeterminada, etiqueta_singular, des
 
 -- 2. Métodos de Pago
 INSERT INTO metodos_pago (id, nombre, tipo, numero_cuenta, titular, instrucciones, activo) VALUES
-('nequi', 'Nequi', 'Billetera digital', '3001234567', 'Ghost Imports S.A.S', 'Transfiere al Nequi y envía comprobante por WhatsApp.', TRUE),
-('bancolombia', 'Bancolombia', 'Cuenta de Ahorros', '12345678901', 'Ghost Imports S.A.S', 'Transferencia directa o QR Bancolombia.', TRUE);
+('nequi', 'Nequi', 'Billetera digital', '3166045499', 'Ghost Imports S.A.S', 'Transfiere al Nequi (+57 316 6045499) y envía comprobante al finalizar el pedido.', TRUE),
+('bancolombia', 'Bancolombia', 'Cuenta de Ahorros', '07800043861', 'Ghost Imports S.A.S', 'Transfiere a la Cuenta de Ahorros Bancolombia 07800043861 y envía comprobante al finalizar el pedido.', TRUE);
 
 -- 3. Productos (11 prendas con fotos locales y precios con margen comercial)
 INSERT INTO productos (id, categoria_id, nombre, marca, precio, descripcion, es_novedad, imagen_url) VALUES

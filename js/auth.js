@@ -161,12 +161,12 @@ window.GhostAuth = {
       if (user) {
         const firstName = user.nombre.split(" ")[0];
         if (user.rol === "admin") {
-          userBtn.innerHTML = `👤 Admin`;
+          userBtn.innerHTML = `👤 <span class="u-name">Admin</span>`;
           userBtn.title = "Panel de Gestión Ghost Imports";
           userBtn.style.color = "var(--ink)";
           userBtn.style.borderColor = "var(--ink)";
         } else {
-          userBtn.innerHTML = `👤 ${firstName}`;
+          userBtn.innerHTML = `👤 <span class="u-name">${firstName}</span>`;
           userBtn.title = `Mi Cuenta (${user.nombre})`;
           userBtn.style.color = "var(--ink)";
         }
