@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Ghost Imports | Streetwear en Colombia</title>
-  <meta name="description" content="Ghost Imports: hoodies Nike, Supreme, Undergold, sneakers Jordan, bolsos Sprayground, pantalonetas y gorras New Era cerradas. Envíos en Colombia.">
-  
+  <meta name="description"
+    content="Ghost Imports: hoodies Nike, Supreme, Undergold, sneakers Jordan, bolsos Sprayground, pantalonetas y gorras New Era cerradas. Envíos en Colombia.">
+
   <!-- Tipografía Oficial Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700&display=swap">
-  
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700&display=swap">
+
   <!-- Estilos CSS -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
   <!-- Barra de Notificación Superior -->
@@ -23,7 +27,7 @@
   <header>
     <div class="wrap bar">
       <button class="ib" id="burger" aria-label="Abrir menú" aria-expanded="false">☰</button>
-      
+
       <a href="index.html" aria-label="Ghost Imports, inicio">
         <img class="lg" src="assets/logo.webp" alt="Ghost Imports">
       </a>
@@ -150,7 +154,9 @@
       <div class="wrap two">
         <h2>Ghost Imports</h2>
         <p>
-          Ghost Imports es una tienda de moda urbana en Colombia. Elegimos prendas y accesorios de marcas que marcan la calle, con foco en el estilo de quien los usa. Aquí encuentras hoodies, sneakers, bolsos, pantalonetas y gorras originales en un solo lugar.
+          Ghost Imports es una tienda de moda urbana en Colombia. Elegimos prendas y accesorios de marcas que marcan la
+          calle, con foco en el estilo de quien los usa. Aquí encuentras hoodies, sneakers, bolsos, pantalonetas y
+          gorras originales en un solo lugar.
         </p>
       </div>
     </section>
@@ -179,10 +185,6 @@
           <div class="tr">
             <h3>Atención y Despacho</h3>
             <p class="pend">Confirmación y guía de envío al registrar tu pedido.</p>
-          </div>
-          <div class="tr">
-            <h3>Base de Datos Integrada</h3>
-            <p class="pend">Registro seguro de pedidos y control de inventario en tiempo real.</p>
           </div>
         </div>
       </div>
@@ -244,7 +246,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
       const prods = await window.GhostDB.getProducts();
-      
+
       const favGrid = document.getElementById("homeFavoritesGrid");
       if (favGrid) {
         favGrid.innerHTML = prods.slice(0, 4).map(window.renderProductCardHTML).join("");
@@ -258,4 +260,5 @@
     });
   </script>
 </body>
+
 </html>

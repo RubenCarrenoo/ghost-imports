@@ -769,25 +769,61 @@ input:focus {
 
 .qty {
   display: inline-flex;
-  border: 1px solid #55585d;
+  align-items: center;
+  border: 1px solid #383a3f;
+  background: #111215;
+  border-radius: 4px;
+  overflow: hidden;
+  user-select: none;
+  vertical-align: middle;
 }
 
-.qty button {
-  background: none;
+.qty button,
+.qty .qty-btn {
+  background: transparent;
+  color: var(--ink);
   border: 0;
-  width: 36px;
-  height: 36px;
-  transition: background 0.2s;
-}
-
-.qty button:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.qty span {
   width: 34px;
+  height: 34px;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.qty button:hover:not([disabled]),
+.qty .qty-btn:hover:not([disabled]) {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+.qty button:active:not([disabled]),
+.qty .qty-btn:active:not([disabled]) {
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(0.94);
+}
+
+.qty button[disabled],
+.qty .qty-btn[disabled] {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.qty span,
+.qty .qty-val {
+  min-width: 32px;
+  padding: 0 4px;
   text-align: center;
-  line-height: 36px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 34px;
 }
 
 /* --------------------------------------------------------------------------
@@ -837,23 +873,25 @@ input:focus {
 
 .li {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   padding: 14px 0;
   border-bottom: 1px solid var(--line);
   font-size: 14px;
+  align-items: flex-start;
 }
 
 .li .t {
-  width: 58px;
-  height: 58px;
+  width: 62px;
+  height: 62px;
   background: #151618;
   border: 1px solid var(--line);
-  flex: none;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 4px;
   overflow: hidden;
+  border-radius: 4px;
 }
 
 .li .t img {
@@ -862,22 +900,119 @@ input:focus {
   object-fit: contain;
 }
 
-.li div {
+.li-info {
   flex: 1;
+  min-width: 0;
+}
+
+.li-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.li-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+  word-break: break-word;
+}
+
+.li-meta {
+  font-size: 12px;
+  color: var(--mut);
+  margin-bottom: 8px;
+}
+
+.li-meta b {
+  color: var(--ink);
+}
+
+.li-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.li-subtotal {
+  font-size: 12.5px;
+  color: var(--mut);
+}
+
+.li-subtotal b {
+  font-size: 13.5px;
+  color: var(--ink);
 }
 
 .rm {
   background: none;
   border: 0;
   color: var(--mut);
-  text-decoration: underline;
-  font-size: 12px;
-  padding: 0;
-  margin-left: 8px;
+  font-size: 11.5px;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 3px;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
 }
 
 .rm:hover {
   color: var(--bad);
+  background: rgba(229, 138, 138, 0.12);
+}
+
+/* Items del checkout en pagar.html */
+.checkout-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.checkout-item-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 220px;
+  flex: 1;
+}
+
+.checkout-item-img {
+  width: 56px;
+  height: 56px;
+  background: #151618;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkout-item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.checkout-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 .shade {
@@ -1369,6 +1504,138 @@ footer {
   background: var(--ok) !important;
   color: #000 !important;
   border-color: var(--ok) !important;
+}
+
+/* Aviso de Paso Obligatorio en Comprobante */
+.comprobante-mandatory-box {
+  background: linear-gradient(135deg, #1f1107 0%, #150903 100%);
+  border: 2px solid #e57e25;
+  border-radius: 6px;
+  padding: 16px 18px;
+  margin: 18px 0 14px;
+  box-shadow: 0 4px 20px rgba(229, 126, 37, 0.25);
+  animation: pulse-border-wa 2s infinite ease-in-out;
+}
+
+.comprobante-mandatory-box.completed {
+  background: linear-gradient(135deg, #091a0e 0%, #041007 100%);
+  border-color: var(--ok);
+  box-shadow: 0 4px 20px rgba(159, 216, 168, 0.2);
+  animation: none;
+}
+
+.comprobante-mandatory-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ff9800;
+  font-size: 13.5px;
+  letter-spacing: 0.05em;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.mandatory-pulse-dot {
+  width: 10px;
+  height: 10px;
+  background: #ff3d00;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 10px #ff3d00;
+  animation: pulse-dot 1.2s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+.notice-check {
+  font-size: 16px;
+  color: var(--ok);
+  font-weight: 800;
+}
+
+.comprobante-mandatory-box p {
+  font-size: 13px;
+  color: var(--sil);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Animación del Botón Obligatorio de WhatsApp */
+.btn-wa-required {
+  animation: pulse-wa-glow 1.8s infinite !important;
+  border: 2px solid #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+}
+
+@keyframes pulse-wa-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-border-wa {
+  0%, 100% {
+    border-color: #e57e25;
+  }
+  50% {
+    border-color: #ff3d00;
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.3);
+  }
+}
+
+/* Efecto de Sacudida si intenta evadir el botón */
+.btn-shake {
+  animation: shake-wa-btn 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+  border: 3px solid #ff3d00 !important;
+}
+
+@keyframes shake-wa-btn {
+  10%, 90% { transform: translate3d(-3px, 0, 0) scale(1.03); }
+  20%, 80% { transform: translate3d(5px, 0, 0) scale(1.03); }
+  30%, 50%, 70% { transform: translate3d(-6px, 0, 0) scale(1.03); }
+  40%, 60% { transform: translate3d(6px, 0, 0) scale(1.03); }
+}
+
+/* Botones secundarios bloqueados */
+.btn-locked {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  filter: grayscale(0.6) !important;
+  position: relative;
+  transition: all 0.3s ease !important;
+}
+
+.btn-locked:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: var(--mut) !important;
+  transform: none !important;
+  border-color: #444 !important;
+}
+
+.btn-wa-completed {
+  background: #178a42 !important;
+  color: #fff !important;
+  border-color: var(--ok) !important;
+  box-shadow: 0 4px 14px rgba(23, 138, 66, 0.4) !important;
 }
 
 /* WhatsApp solo disponible al momento del pago */

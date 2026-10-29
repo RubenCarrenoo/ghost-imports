@@ -69,7 +69,7 @@ const INITIAL_PRODUCTS = [
     brand: "Nike",
     price: 295000,
     image: "img/hoddie nike.png",
-    stock: { S: 3, M: 5, L: 4, XL: 2 },
+    stock: { S: 10, M: 15, L: 12, XL: 8 },
     new: true,
     description: "Hoodie Nike confeccionado en algodón fleece pesado de alta densidad con forro térmico suave. Logotipo Swoosh bordado en el pecho, corte oversize urbano y bolsillo canguro frontal."
   },
@@ -80,7 +80,7 @@ const INITIAL_PRODUCTS = [
     brand: "Supreme",
     price: 450000,
     image: "img/hoddie supreme.png",
-    stock: { S: 2, M: 4, L: 2, XL: 1 },
+    stock: { S: 8, M: 12, L: 10, XL: 6 },
     new: true,
     description: "Sudadera icónica Supreme Box Logo en algodón peinado premium. Bordado frontal de alta definición en relieve, costuras reforzadas y capucha estructurada con cordón grueso."
   },
@@ -91,7 +91,7 @@ const INITIAL_PRODUCTS = [
     brand: "Undergold",
     price: 395000,
     image: "img/hoddie undergold.png",
-    stock: { S: 1, M: 3, L: 5, XL: 2 },
+    stock: { S: 6, M: 10, L: 14, XL: 8 },
     new: false,
     description: "Buzo Undergold de silueta holgada y hombros caídos. Fabricado en algodón pesado con diseño minimalista contemporáneo para amantes de la cultura callejera."
   },
@@ -102,7 +102,7 @@ const INITIAL_PRODUCTS = [
     brand: "Jordan",
     price: 890000,
     image: "img/jordan 3 negras.png",
-    stock: { "39": 1, "40": 2, "41": 2, "42": 3, "43": 1 },
+    stock: { "39": 8, "40": 10, "41": 10, "42": 12, "43": 8 },
     new: true,
     description: "El legendario Air Jordan 3 Retro Black Cement con el característico estampado Elephant Print, cuero genuino granulado y cápsula Air-Sole visible en el talón."
   },
@@ -113,7 +113,7 @@ const INITIAL_PRODUCTS = [
     brand: "Jordan",
     price: 960000,
     image: "img/jordan 4 oreo.png",
-    stock: { "39": 2, "40": 3, "41": 1, "42": 4, "43": 2, "44": 1 },
+    stock: { "39": 8, "40": 10, "41": 8, "42": 12, "43": 8, "44": 6 },
     new: true,
     description: "Silueta Jordan 4 White Oreo elaborada en piel prémium blanca con detalles moteados en gris cemento y el emblemático Jumpman en rojo fuego sobre la lengüeta."
   },
@@ -124,7 +124,7 @@ const INITIAL_PRODUCTS = [
     brand: "Sprayground",
     price: 580000,
     image: "img/sprawground.png",
-    stock: { "Única": 5 },
+    stock: { "Única": 15 },
     new: true,
     description: "Mochila Sprayground de edición exclusiva con el gráfico Shark Mouth y estampado a cuadros en tonos tierra. Tejido impermeable duradero y funda aterciopelada para laptop de 15\"."
   },
@@ -135,7 +135,7 @@ const INITIAL_PRODUCTS = [
     brand: "Sprayground",
     price: 590000,
     image: "img/sprawground blanco.png",
-    stock: { "Única": 3 },
+    stock: { "Única": 12 },
     new: false,
     description: "Morral Sprayground blanco puro con diseño Shark reflectivo, bolsillo ergonómico con cremallera oculta, espaldar acolchado de malla y correas ajustables ergonómicas."
   },
@@ -146,7 +146,7 @@ const INITIAL_PRODUCTS = [
     brand: "Jordan",
     price: 210000,
     image: "img/pantaloneta jordan roja.png",
-    stock: { S: 3, M: 5, L: 4, XL: 2 },
+    stock: { S: 10, M: 15, L: 12, XL: 8 },
     new: true,
     description: "Pantaloneta deportiva Jordan en tono rojo intenso inspirada en el uniforme profesional de Michael Jordan. Confeccionada en malla transpirable con detalles en diamante."
   },
@@ -157,7 +157,7 @@ const INITIAL_PRODUCTS = [
     brand: "Jordan",
     price: 195000,
     image: "img/pantaloneta negra jordan.png",
-    stock: { S: 2, M: 6, L: 3, XL: 1 },
+    stock: { S: 8, M: 16, L: 12, XL: 6 },
     new: false,
     description: "Short streetwear Jordan negro total con bolsillos laterales, pretina elástica con cordón de ajuste y logotipo Jumpman en contraste blanco."
   },
@@ -168,7 +168,7 @@ const INITIAL_PRODUCTS = [
     brand: "New Era",
     price: 245000,
     image: "img/new era LA negra.png",
-    stock: { "7 1/4": 3, "7 3/8": 4, "7 1/2": 2 },
+    stock: { "7 1/4": 10, "7 3/8": 12, "7 1/2": 8 },
     new: true,
     description: "Gorra oficial 59FIFTY cerrada de Los Angeles Dodgers en colorway negro con corona alta estructurada, visera plana y bordado en 3D de alta precisión."
   },
@@ -179,7 +179,7 @@ const INITIAL_PRODUCTS = [
     brand: "New Era",
     price: 235000,
     image: "img/new era negra con blanco.png",
-    stock: { "7 1/4": 2, "7 3/8": 3, "7 1/2": 2 },
+    stock: { "7 1/4": 8, "7 3/8": 10, "7 1/2": 8 },
     new: false,
     description: "Gorra cerrada New Era 59FIFTY de los New York Yankees con corona negra, visera blanca en contraste y logo bordado oficial de la MLB."
   }

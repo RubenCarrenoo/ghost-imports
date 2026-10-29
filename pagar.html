@@ -173,40 +173,58 @@
     function updateCheckoutSummary() {
       const itemsContainer = document.getElementById("checkoutCartItems");
       const totalAmountEl = document.getElementById("checkoutTotalAmount");
+      const checkoutForm = document.getElementById("checkoutForm");
+      if (!itemsContainer || !totalAmountEl) return;
       const cart = window.ghostCart || [];
 
       if (cart.length === 0) {
         itemsContainer.innerHTML = `
-          <div class="empty" style="padding:24px 0">
+          <div class="empty" style="padding:24px 0;text-align:center">
             No tienes productos en el carrito.
             <div style="margin-top:14px">
               <a href="catalogo.html" class="btn">IR AL CATÁLOGO</a>
             </div>
           </div>
         `;
-        document.getElementById("checkoutForm").style.display = "none";
+        if (checkoutForm) checkoutForm.style.display = "none";
         totalAmountEl.textContent = "$0 COP";
         return;
       }
 
-      const total = cart.reduce((sum, item) => sum + item.price * item.q, 0);
+      if (checkoutForm) checkoutForm.style.display = "";
+
+      const total = cart.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.q) || 0), 0);
       totalAmountEl.textContent = window.formatCOP(total);
 
-      itemsContainer.innerHTML = cart.map(item => `
-        <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)">
-          <div style="width:50px;height:50px;background:#000;border:1px solid var(--line);flex-shrink:0">
-            <img src="${item.image || 'assets/logo.webp'}" alt="${item.name}" style="width:100%;height:100%;object-fit:contain">
+      itemsContainer.innerHTML = cart.map((item, idx) => `
+        <div class="checkout-item-row" data-idx="${idx}">
+          <div class="checkout-item-left">
+            <div class="checkout-item-img">
+              <img src="${item.image || 'assets/logo.webp'}" alt="${item.name}">
+            </div>
+            <div>
+              <b style="font-size:15px;color:var(--ink)">${item.name}</b><br>
+              <span style="color:var(--mut);font-size:13px">Talla: <b>${item.s}</b> · ${window.formatCOP(item.price)} c/u</span>
+            </div>
           </div>
-          <div style="flex:1">
-            <b>${item.name}</b> (Talla ${item.s})<br>
-            <span style="color:var(--mut);font-size:13px">Cantidad: ${item.q} · ${window.formatCOP(item.price)} c/u</span>
-          </div>
-          <div>
-            <b>${window.formatCOP(item.price * item.q)}</b>
+          <div class="checkout-item-actions">
+            <div class="qty" role="group" aria-label="Cantidad para ${item.name}">
+              <button type="button" class="qty-btn" data-action="cart-minus" data-idx="${idx}" aria-label="Bajar cantidad" title="Disminuir unidad">−</button>
+              <span class="qty-val" aria-live="polite">${item.q}</span>
+              <button type="button" class="qty-btn" data-action="cart-plus" data-idx="${idx}" aria-label="Subir cantidad" title="Aumentar unidad">+</button>
+            </div>
+            <div style="min-width:115px;text-align:right">
+              <span style="display:block;font-size:11px;color:var(--mut);text-transform:uppercase">Subtotal</span>
+              <b style="font-size:16px;color:var(--ink)">${window.formatCOP(item.price * item.q)}</b>
+            </div>
+            <button type="button" class="rm" data-action="cart-remove" data-idx="${idx}" title="Quitar prenda" style="color:var(--bad)">
+              ✕ Quitar
+            </button>
           </div>
         </div>
       `).join("");
     }
+    window.updateCheckoutSummary = updateCheckoutSummary;
 
     function renderPaymentInstructions(methodKey) {
       const isBancolombia = methodKey === 'bancolombia';
@@ -323,20 +341,19 @@
             // Generar y renderizar comprobante oficial digital completo de Ghost Imports
             const successContainer = document.getElementById("checkoutSuccess");
             successContainer.innerHTML = window.renderOrderReceiptHTML(order);
-            successContainer.scrollIntoView({ behavior: "smooth", block: "start" });
 
-            // Abrir automáticamente WhatsApp con el comprobante oficial pre-cargado
-            const waPhone = (window.CONFIG && window.CONFIG.whatsapp) || "573166045499";
-            const receiptText = window.formatOrderReceiptText(order);
-            const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(receiptText)}`;
-
+            // Enfocar y centrar la vista en el botón obligatorio de WhatsApp
+            const orderCode = order.orderCode || ("GH-" + String(order.id || Date.now()).slice(-5));
             setTimeout(() => {
-              try {
-                window.open(waUrl, "_blank");
-              } catch (e) {}
-            }, 600);
+              const waBtn = document.getElementById("btnSendWA-" + orderCode);
+              if (waBtn) {
+                waBtn.scrollIntoView({ behavior: "smooth", block: "center" });
+              } else {
+                successContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+              }
+            }, 300);
 
-            window.showToast("✓ ¡Pedido registrado! Envía tu comprobante a WhatsApp.");
+            window.showToast("⚠️ ¡Paso obligatorio! Presiona el botón verde para enviar tu comprobante a WhatsApp.");
           } catch (err) {
             console.error(err);
             window.showToast("Error guardando pedido: " + err.message, true);

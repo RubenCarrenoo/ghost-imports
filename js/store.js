@@ -20,8 +20,18 @@ window.ghostCart = [];
 window.ghostFavs = [];
 
 try {
-  window.ghostCart = JSON.parse(localStorage.getItem("gi_cart") || "[]");
-  window.ghostFavs = JSON.parse(localStorage.getItem("gi_fav") || "[]");
+  const rawCart = JSON.parse(localStorage.getItem("gi_cart") || "[]");
+  if (Array.isArray(rawCart)) {
+    window.ghostCart = rawCart.map(item => ({
+      ...item,
+      q: Math.max(1, parseInt(item.q, 10) || 1),
+      price: Number(item.price) || 0
+    }));
+  }
+  const rawFavs = JSON.parse(localStorage.getItem("gi_fav") || "[]");
+  if (Array.isArray(rawFavs)) {
+    window.ghostFavs = rawFavs;
+  }
 } catch (e) {
   window.ghostCart = [];
   window.ghostFavs = [];
@@ -32,6 +42,65 @@ window.saveCartAndFavs = function () {
     localStorage.setItem("gi_cart", JSON.stringify(window.ghostCart));
     localStorage.setItem("gi_fav", JSON.stringify(window.ghostFavs));
   } catch (e) {}
+};
+
+// Cache en memoria para agilizar verificación de stock
+window._ghostProdsCache = null;
+window.getGhostProductStockLimit = async function (productId, size) {
+  try {
+    if (!window._ghostProdsCache && window.GhostDB && typeof window.GhostDB.getProducts === "function") {
+      window._ghostProdsCache = await window.GhostDB.getProducts();
+    }
+    const prods = window._ghostProdsCache || [];
+    const p = prods.find((x) => String(x.id) === String(productId));
+    if (p && p.stock && p.stock[size] != null) {
+      const parsed = Number(p.stock[size]);
+      return parsed > 0 ? parsed : 10;
+    }
+  } catch (err) {
+    console.warn("Error consultando stock del producto:", err);
+  }
+  return 99; // Límite amplio por defecto si no está especificado
+};
+
+// Quitar producto del carrito
+window.removeFromGhostCart = function (idx) {
+  const i = Number(idx);
+  if (isNaN(i) || i < 0 || i >= window.ghostCart.length) return;
+  const removed = window.ghostCart.splice(i, 1)[0];
+  window.updateCartUI();
+  if (removed) {
+    window.showToast(`Se quitó "${removed.name}" del carrito`);
+  }
+};
+
+// Modificar cantidad (delta: +1 para subir, -1 para bajar)
+window.changeGhostCartQty = async function (idx, delta) {
+  const i = Number(idx);
+  if (isNaN(i) || i < 0 || i >= window.ghostCart.length) return;
+  const item = window.ghostCart[i];
+  if (!item) return;
+
+  const currentQ = Math.max(1, parseInt(item.q, 10) || 1);
+  const targetQ = currentQ + delta;
+
+  // Si baja a 0, quitar directamente del carrito
+  if (targetQ <= 0) {
+    window.removeFromGhostCart(i);
+    return;
+  }
+
+  // Si sube cantidad, validar contra stock disponible
+  if (delta > 0) {
+    const limit = await window.getGhostProductStockLimit(item.id, item.s);
+    if (currentQ >= limit && limit > 0) {
+      window.showToast(`Límite alcanzado (${limit} unidades disponibles en talla ${item.s})`, true);
+      return;
+    }
+  }
+
+  item.q = targetQ;
+  window.updateCartUI();
 };
 
 // Notificaciones Toast
@@ -64,15 +133,15 @@ window.toggleCart = function (isOpen) {
   }
 };
 
-// Renderizar contenido del carrito con foto de cada prenda
+// Renderizar contenido del carrito con foto de cada prenda, subtotales y controles
 window.updateCartUI = function () {
   const countEl = document.getElementById("cnt");
   const totEl = document.getElementById("tot");
   const goBtn = document.getElementById("go");
   const listEl = document.getElementById("cl");
 
-  const totalCount = window.ghostCart.reduce((sum, item) => sum + item.q, 0);
-  const totalAmount = window.ghostCart.reduce((sum, item) => sum + item.price * item.q, 0);
+  const totalCount = window.ghostCart.reduce((sum, item) => sum + (Number(item.q) || 0), 0);
+  const totalAmount = window.ghostCart.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.q) || 0), 0);
 
   if (countEl) countEl.textContent = totalCount;
   if (totEl) totEl.textContent = window.formatCOP(totalAmount);
@@ -83,19 +152,30 @@ window.updateCartUI = function () {
       listEl.innerHTML = window.ghostCart
         .map(
           (item, idx) => `
-          <div class="li">
+          <div class="li" data-idx="${idx}">
             <div class="t">
-              <img src="${item.image || 'assets/logo.webp'}" alt="${item.name}" style="width:100%;height:100%;object-fit:contain">
+              <img src="${item.image || 'assets/logo.webp'}" alt="${item.name}">
             </div>
-            <div>
-              <b>${item.name}</b><br>
-              <span class="br">Talla ${item.s} · ${window.formatCOP(item.price)}</span><br>
-              <span class="qty">
-                <button type="button" data-action="cart-minus" data-idx="${idx}" aria-label="Menos unidades">−</button>
-                <span>${item.q}</span>
-                <button type="button" data-action="cart-plus" data-idx="${idx}" aria-label="Más unidades">+</button>
-              </span>
-              <button type="button" class="rm" data-action="cart-remove" data-idx="${idx}">Quitar</button>
+            <div class="li-info">
+              <div class="li-header">
+                <b class="li-title">${item.name}</b>
+                <button type="button" class="rm" data-action="cart-remove" data-idx="${idx}" title="Quitar prenda del carrito" aria-label="Quitar ${item.name}">
+                  ✕ Quitar
+                </button>
+              </div>
+              <div class="li-meta">
+                <span class="br">Talla: <b>${item.s}</b></span> · <span>${window.formatCOP(item.price)} c/u</span>
+              </div>
+              <div class="li-bottom">
+                <div class="qty" role="group" aria-label="Cantidad para ${item.name}">
+                  <button type="button" class="qty-btn" data-action="cart-minus" data-idx="${idx}" aria-label="Bajar una unidad" title="Bajar cantidad">−</button>
+                  <span class="qty-val" aria-live="polite">${item.q}</span>
+                  <button type="button" class="qty-btn" data-action="cart-plus" data-idx="${idx}" aria-label="Subir una unidad" title="Subir cantidad">+</button>
+                </div>
+                <div class="li-subtotal">
+                  <span>Total: </span><b>${window.formatCOP(item.price * item.q)}</b>
+                </div>
+              </div>
             </div>
           </div>
         `
@@ -103,47 +183,58 @@ window.updateCartUI = function () {
         .join("");
     } else {
       listEl.innerHTML = `
-        <div class="empty" style="margin-top:20px">
-          Tu carrito está vacío. Agrega prendas desde el catálogo.
+        <div class="empty" style="margin-top:20px;text-align:center;padding:24px 10px">
+          <p style="margin-bottom:14px;color:var(--mut)">Tu carrito está vacío.</p>
+          <a href="catalogo.html" class="btn g" style="font-size:12px;display:inline-block">Explorar Catálogo</a>
         </div>
       `;
     }
   }
 
   window.saveCartAndFavs();
+
+  // Sincronizar automáticamente la pantalla de checkout si existe en la página actual
+  if (typeof window.updateCheckoutSummary === "function") {
+    try {
+      window.updateCheckoutSummary();
+    } catch (e) {
+      console.warn("Error sincronizando checkout:", e);
+    }
+  }
 };
 
 // Agregar al carrito guardando la foto
 window.addToGhostCart = async function (productId, size) {
   const prods = await window.GhostDB.getProducts();
-  const product = prods.find((p) => p.id === productId);
+  window._ghostProdsCache = prods;
+  const product = prods.find((p) => String(p.id) === String(productId));
 
   if (!product) {
     window.showToast("Producto no encontrado", true);
     return false;
   }
 
-  const stockLimit = (product.stock && product.stock[size]) || 0;
-  if (!size || stockLimit <= 0) {
+  const stockLimit = (product.stock && product.stock[size] != null) ? Number(product.stock[size]) : 10;
+  if (!size) {
     window.showToast("Elige una talla disponible", true);
     return false;
   }
 
-  const existing = window.ghostCart.find((i) => i.id === productId && i.s === size);
-  const currentQ = existing ? existing.q : 0;
+  const existing = window.ghostCart.find((i) => String(i.id) === String(productId) && i.s === size);
+  const currentQ = existing ? (parseInt(existing.q, 10) || 0) : 0;
 
-  if (currentQ + 1 > stockLimit) {
+  if (currentQ + 1 > stockLimit && stockLimit > 0) {
     window.showToast(`Solo quedan ${stockLimit} unidades disponibles en talla ${size}`, true);
     return false;
   }
 
   if (existing) {
-    existing.q += 1;
+    existing.q = currentQ + 1;
   } else {
     window.ghostCart.push({
       id: productId,
       name: product.name,
-      price: product.price,
+      price: Number(product.price) || 0,
       s: size,
       q: 1,
       brand: product.brand,
@@ -264,40 +355,27 @@ document.addEventListener("click", async (e) => {
   // Disminuir en carrito
   if (target.dataset.action === "cart-minus") {
     e.preventDefault();
+    e.stopPropagation();
     const i = Number(target.dataset.idx);
-    if (window.ghostCart[i]) {
-      window.ghostCart[i].q -= 1;
-      if (window.ghostCart[i].q <= 0) window.ghostCart.splice(i, 1);
-      window.updateCartUI();
-    }
+    window.changeGhostCartQty(i, -1);
     return;
   }
 
   // Aumentar en carrito
   if (target.dataset.action === "cart-plus") {
     e.preventDefault();
+    e.stopPropagation();
     const i = Number(target.dataset.idx);
-    const item = window.ghostCart[i];
-    if (item) {
-      const prods = await window.GhostDB.getProducts();
-      const p = prods.find((x) => x.id === item.id);
-      const limit = (p && p.stock && p.stock[item.s]) || 0;
-      if (item.q < limit) {
-        item.q += 1;
-        window.updateCartUI();
-      } else {
-        window.showToast(`Límite alcanzado (${limit} unidades disponibles)`, true);
-      }
-    }
+    window.changeGhostCartQty(i, 1);
     return;
   }
 
   // Quitar del carrito
   if (target.dataset.action === "cart-remove") {
     e.preventDefault();
+    e.stopPropagation();
     const i = Number(target.dataset.idx);
-    window.ghostCart.splice(i, 1);
-    window.updateCartUI();
+    window.removeFromGhostCart(i);
     return;
   }
 });
@@ -331,8 +409,92 @@ window.toggleMobileNav = function (force) {
 };
 
 // ==============================================================================
-// GESTIÓN DE COMPROBANTES DE PEDIDO & ENVÍO A WHATSAPP (+57 316 6045499)
+// GESTIÓN DE COMPROBANTES DE PEDIDO & ENVÍO OBLIGATORIO A WHATSAPP (+57 316 6045499)
 // ==============================================================================
+
+window._waSentOrders = {};
+
+// Verificar si una orden ya fue enviada por WhatsApp
+window.isOrderWaSent = function (code) {
+  if (window._waSentOrders && window._waSentOrders[code]) return true;
+  try {
+    return sessionStorage.getItem("gi_wa_sent_" + code) === "true";
+  } catch (e) {
+    return false;
+  }
+};
+
+// Manejador al presionar el botón obligatorio de WhatsApp
+window.markWhatsAppSent = function (code) {
+  window._waSentOrders[code] = true;
+  try {
+    sessionStorage.setItem("gi_wa_sent_" + code, "true");
+  } catch (e) {}
+
+  // Actualizar el aviso de paso obligatorio a completado
+  const noticeBox = document.getElementById("waNoticeBox-" + code);
+  if (noticeBox) {
+    noticeBox.className = "comprobante-mandatory-box completed";
+    noticeBox.innerHTML = `
+      <div class="comprobante-mandatory-header" style="color:var(--ok)">
+        <span class="notice-check">✓</span>
+        <b>¡PASO COMPLETADO! COMPROBANTE ENVIADO A WHATSAPP</b>
+      </div>
+      <p style="color:var(--sil);margin:0">
+        Tu pedido <b>#${code}</b> ya fue notificado a nuestro equipo por WhatsApp (+57 316 604 5499). La navegación y tu cuenta han sido desbloqueadas.
+      </p>
+    `;
+  }
+
+  // Actualizar el botón de WhatsApp a estado confirmado
+  const btn = document.getElementById("btnSendWA-" + code);
+  const btnText = document.getElementById("btnSendWAText-" + code);
+  if (btn) {
+    btn.classList.remove("btn-wa-required");
+    btn.classList.add("btn-wa-completed");
+  }
+  if (btnText) {
+    btnText.textContent = "✓ COMPROBANTE ENVIADO (Toca para volver a abrir WhatsApp)";
+  }
+
+  // Desbloquear botones de cuenta y catálogo
+  const lnkCuenta = document.getElementById("lnkCuenta-" + code);
+  const lnkCatalogo = document.getElementById("lnkCatalogo-" + code);
+  if (lnkCuenta) {
+    lnkCuenta.classList.remove("btn-locked");
+    lnkCuenta.innerHTML = "VER ESTADO EN MI CUENTA";
+    lnkCuenta.title = "";
+  }
+  if (lnkCatalogo) {
+    lnkCatalogo.classList.remove("btn-locked");
+    lnkCatalogo.innerHTML = "SEGUIR COMPRANDO";
+    lnkCatalogo.title = "";
+  }
+
+  window.showToast("✓ ¡Paso obligatorio completado! Gracias por enviar tu comprobante.");
+};
+
+// Validar si el usuario intenta salir o navegar sin haber presionado el botón de WhatsApp
+window.checkWaRequired = function (e, code) {
+  if (window.isOrderWaSent(code)) {
+    return true;
+  }
+
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  const btn = document.getElementById("btnSendWA-" + code);
+  if (btn) {
+    btn.classList.add("btn-shake");
+    setTimeout(() => btn.classList.remove("btn-shake"), 700);
+    btn.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  window.showToast("⚠️ ¡Acción obligatoria! Debes presionar 'ENVIAR COMPROBANTE AL WHATSAPP' para despachar tu pedido.", true);
+  return false;
+};
 
 // Generar texto estructurado del comprobante para WhatsApp y Portapapeles
 window.formatOrderReceiptText = function (order) {
@@ -430,6 +592,7 @@ window.renderOrderReceiptHTML = function (order) {
   const waFormatted = "+57 316 6045499";
   const receiptText = window.formatOrderReceiptText(order);
   const waUrl = `https://wa.me/${waTarget}?text=${encodeURIComponent(receiptText)}`;
+  const alreadySent = window.isOrderWaSent(code);
 
   const itemsRows = (order.items || [])
     .map(
@@ -527,18 +690,31 @@ window.renderOrderReceiptHTML = function (order) {
           <div>Referencia: <b>#${code}</b></div>
         </div>
         <p class="comprobante-bank-note">
-          Transfiere el valor exacto de <b>${totalStr}</b> y presiona el botón verde de abajo para enviar automáticamente tu comprobante al WhatsApp <b>${waFormatted}</b>.
+          Transfiere el valor exacto de <b>${totalStr}</b> a la cuenta indicada. A continuación, <b>es obligatorio presionar el botón verde</b> para enviar el comprobante directamente a nuestro WhatsApp oficial y proceder con el empaque y despacho de tu paquete.
+        </p>
+      </div>
+
+      <!-- AVISO DE PASO OBLIGATORIO -->
+      <div class="comprobante-mandatory-box ${alreadySent ? "completed" : ""}" id="waNoticeBox-${code}">
+        <div class="comprobante-mandatory-header" style="${alreadySent ? "color:var(--ok)" : ""}">
+          ${alreadySent ? '<span class="notice-check">✓</span>' : '<span class="mandatory-pulse-dot"></span>'}
+          <b>${alreadySent ? "¡PASO COMPLETADO! COMPROBANTE ENVIADO A WHATSAPP" : "PASO FINAL OBLIGATORIO PARA AUTORIZAR DESPACHO"}</b>
+        </div>
+        <p>
+          ${alreadySent 
+            ? `Tu pedido <b>#${code}</b> ya ha sido notificado a nuestro equipo por WhatsApp (+57 316 604 5499). La navegación y tu cuenta están activas.` 
+            : `Tu compra quedó registrada en la base de datos, pero <b>NO será despachada hasta que presiones el botón verde</b> y envíes el comprobante a nuestro WhatsApp oficial (+57 316 604 5499).`}
         </p>
       </div>
 
       <!-- ACCIONES PRINCIPALES: ENVÍO A WHATSAPP Y GESTIÓN -->
-      <div class="comprobante-actions">
-        <!-- BOTÓN PRINCIPAL A WHATSAPP: +57 316 6045499 -->
-        <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-wa-send" id="btnSendWA-${code}">
-          <svg viewBox="0 0 32 32" width="22" height="22" fill="currentColor" style="vertical-align:middle;margin-right:8px">
+      <div class="comprobante-actions" id="compActions-${code}">
+        <!-- BOTÓN PRINCIPAL A WHATSAPP: OBLIGATORIO -->
+        <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-wa-send ${alreadySent ? "btn-wa-completed" : "btn-wa-required"}" id="btnSendWA-${code}" onclick="window.markWhatsAppSent('${code}')">
+          <svg viewBox="0 0 32 32" width="24" height="24" fill="currentColor" style="vertical-align:middle;margin-right:8px">
             <path d="M16 2a13.9 13.9 0 0 0-12 21L2 30l7.2-1.9A14 14 0 1 0 16 2zm0 25.5a11.6 11.6 0 0 1-5.9-1.6l-.4-.3-4.4 1.2 1.2-4.3-.3-.5A11.6 11.6 0 1 1 16 27.5zm6.4-8.7c-.3-.2-2-.1-2.3 0-.3.2-.6.3-.8.7-.3.3-.6.4-1.2.1a14.8 14.8 0 0 1-4.4-3.9c-.6-.7-.1-.7.4-1.4.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5l-.7-1.8c-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 .5-.4.4-1.4 1.4-1.4 3.4s1.5 3.9 1.7 4.1c.2.3 2.9 4.4 7 6.2 1 .4 1.7.7 2.3.9 1 .3 1.9.3 2.6.2.8-.1 2.4-1 2.8-1.9.3-1 .3-1.8.2-2 0-.2-.3-.3-.6-.5z"/>
           </svg>
-          ENVIAR COMPROBANTE AL WHATSAPP (${waFormatted})
+          <span id="btnSendWAText-${code}">${alreadySent ? "✓ COMPROBANTE ENVIADO (Toca para volver a abrir WhatsApp)" : "📲 ENVIAR COMPROBANTE AL WHATSAPP (PASO OBLIGATORIO)"}</span>
         </a>
 
         <!-- Botones secundarios -->
@@ -551,19 +727,48 @@ window.renderOrderReceiptHTML = function (order) {
           </button>
         </div>
 
-        <!-- Enlaces de navegación -->
-        <div class="comprobante-links">
-          <a href="cuenta.html" class="btn g" style="font-size:12px;flex:1;text-align:center">
-            VER ESTADO EN MI CUENTA
+        <!-- Enlaces de navegación con bloqueo obligatorio -->
+        <div class="comprobante-links" id="compLinks-${code}">
+          <a href="cuenta.html" class="btn g ${alreadySent ? "" : "btn-locked"}" id="lnkCuenta-${code}" onclick="return window.checkWaRequired(event, '${code}')" title="${alreadySent ? "" : "Bloqueado hasta presionar el botón de WhatsApp"}">
+            ${alreadySent ? "VER ESTADO EN MI CUENTA" : "🔒 VER ESTADO EN MI CUENTA"}
           </a>
-          <a href="catalogo.html" class="btn g" style="font-size:12px;flex:1;text-align:center">
-            SEGUIR COMPRANDO
+          <a href="catalogo.html" class="btn g ${alreadySent ? "" : "btn-locked"}" id="lnkCatalogo-${code}" onclick="return window.checkWaRequired(event, '${code}')" title="${alreadySent ? "" : "Bloqueado hasta presionar el botón de WhatsApp"}">
+            ${alreadySent ? "SEGUIR COMPRANDO" : "🔒 SEGUIR COMPRANDO"}
           </a>
         </div>
       </div>
     </div>
   `;
 };
+
+// Interceptar navegación general de la cabecera si hay un pedido pendiente de envío obligatorio a WhatsApp
+document.addEventListener("click", (e) => {
+  const navLink = e.target.closest("header nav a, header .bar a");
+  if (!navLink) return;
+
+  const pendingNotice = document.querySelector(".comprobante-mandatory-box:not(.completed)");
+  if (pendingNotice) {
+    const codeMatch = pendingNotice.id && pendingNotice.id.replace("waNoticeBox-", "");
+    if (codeMatch && !window.isOrderWaSent(codeMatch)) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.checkWaRequired(null, codeMatch);
+    }
+  }
+}, true);
+
+// Alerta preventiva si intenta cerrar o recargar la pestaña antes de presionar el botón obligatorio de WhatsApp
+window.addEventListener("beforeunload", (e) => {
+  const pendingNotice = document.querySelector(".comprobante-mandatory-box:not(.completed)");
+  if (pendingNotice) {
+    const codeMatch = pendingNotice.id && pendingNotice.id.replace("waNoticeBox-", "");
+    if (codeMatch && !window.isOrderWaSent(codeMatch)) {
+      e.preventDefault();
+      e.returnValue = "¡Tienes un comprobante pendiente de enviar a WhatsApp para autorizar el despacho de tu pedido!";
+      return e.returnValue;
+    }
+  }
+});
 
 // Cerrar carrito al hacer clic en sombra
 document.addEventListener("DOMContentLoaded", () => {
